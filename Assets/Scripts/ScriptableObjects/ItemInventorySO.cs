@@ -9,6 +9,11 @@ public class ItemInventorySO : ScriptableObject
 
     public ItemTypeSO Random;
 
+    private void Awake()
+    {
+        PopulateDictionary();
+    }
+
     private void OnValidate()
     {
         PopulateDictionary();

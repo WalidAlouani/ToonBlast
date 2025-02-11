@@ -9,13 +9,14 @@ public class TileItem : MonoBehaviour
 
     private ItemTypeSO data;
     public ItemType ItemType => data.Type;
-    public int X {  get; private set; }
+    public int X { get; private set; }
     public int Y { get; private set; }
 
     public void Init(int x, int y, ItemTypeSO typeData)
     {
         X = x;
         Y = y;
+        transform.localPosition = new Vector2(x, y);
         data = typeData;
         spriteRenderer.sprite = data.Sprite;
         name = $"Tile[{x},{y}]";
@@ -25,12 +26,11 @@ public class TileItem : MonoBehaviour
     {
         X = x;
         Y = y;
-    }
 
-    public void UpdatePosition(Vector3 position)
-    {
-        transform.DOMoveY(position.y, animationDuration)
-            .SetEase(animationType);
+        if (animate)
+            transform.DOLocalMove(new Vector2(x, y), animationDuration).SetEase(animationType);
+        else
+            transform.localPosition = new Vector2(x, y);
     }
 
     public void Tapped()

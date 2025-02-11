@@ -3,6 +3,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private LevelDataLoader levelDataLoader;
+    [SerializeField] private GameScreenFitter gameScreenFitter;
     [SerializeField] private MovesManager movesManager;
     [SerializeField] private GoalManager goalManager;
     [SerializeField] private GridManager gridManager;
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     private void OnLevelInfoLoaded(LevelData data)
     {
+        gameScreenFitter.Init(data.Width, data.Height);
         movesManager.Init(data.MaxMoves);
         goalManager.Init(data.LevelGoals);
         gridManager.Init(data.Width, data.Height);
