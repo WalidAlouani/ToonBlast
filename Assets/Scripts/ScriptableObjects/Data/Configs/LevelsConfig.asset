@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06cee893cfda655448a3670addfd0ef0, type: 3}
+  m_Name: LevelsConfig
+  m_EditorClassIdentifier: 
+  SaveDirectory: Levels
+  MinGridWidth: 5
+  MinGridHeight: 5
+  MaxGridWidth: 9
+  MaxGridHeight: 9
+  RandomItem: {fileID: 11400000, guid: df5c4c8a76277524c9adaf7fdd59e1eb, type: 2}
+  ItemInventory: {fileID: 11400000, guid: 46dff3de62e685e4d842b486d6aa2de1, type: 2}
