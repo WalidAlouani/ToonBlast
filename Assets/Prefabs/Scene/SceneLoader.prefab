@@ -219,7 +219,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44ea526287a0a434c83d1f1b2d9b9250, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelName: Game
+  dontDestroyOnLoad: 1
+  menuSceneName: {fileID: 102900000, guid: 2cda990e2423bbf4892e6590ba056729, type: 3}
+  gameSceneName: {fileID: 102900000, guid: fd45af948468acd4eb1f28d64faf3347, type: 3}
   loadingScreen: {fileID: 4661742599638121462}
   fakeProgressDuration: 2
   fadeInDuration: 0.5

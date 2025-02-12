@@ -14,6 +14,11 @@ public class LevelSelectionScreen : MainMenuView
         InitializeLevelButtons();
     }
 
+    private void OnDestroy()
+    {
+        backButton.onClick.RemoveAllListeners();
+    }
+
     private void InitializeLevelButtons()
     {
         for (int i = 0; i < levelsData.LevelsNumbers.Count; i++)
@@ -28,6 +33,6 @@ public class LevelSelectionScreen : MainMenuView
     private void OnClick(int levelNumber)
     {
         levelsData.SelectedLevel = levelNumber;
-        SceneLoader.Instance.LoadLevel("Game");
+        SceneLoader.Instance.LoadGameScene();
     }
 }

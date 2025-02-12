@@ -1,25 +1,35 @@
 using System.Collections;
 using DG.Tweening;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SceneLoader : Singleton<SceneLoader>
 {
-    public string levelName;
-    public GameObject loadingScreen;
-    public float fakeProgressDuration = 2f;
-    public float fadeInDuration = 0.5f;
-    public float fadeOutDuration = 0.5f;
+    [SerializeField] private SceneAsset menuSceneName;
+    [SerializeField] private SceneAsset gameSceneName;
+    [SerializeField] private GameObject loadingScreen;
+    [SerializeField] private float fakeProgressDuration = 2f;
+    [SerializeField] private float fadeInDuration = 0.5f;
+    [SerializeField] private float fadeOutDuration = 0.5f;
+    private string levelName;
 
-    public void LoadLevel()
+    public void LoadScene(string sceneName)
     {
+        this.levelName = sceneName;
         StartCoroutine(LoadLevelAsync());
     }
 
-    public void LoadLevel(string levelName)
+    public void LoadMenuScene()
     {
-        this.levelName = levelName;
+        this.levelName = menuSceneName.name;
+        StartCoroutine(LoadLevelAsync());
+    }
+
+    public void LoadGameScene()
+    {
+        this.levelName = gameSceneName.name;
         StartCoroutine(LoadLevelAsync());
     }
 

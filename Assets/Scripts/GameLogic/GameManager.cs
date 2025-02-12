@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private LevelDataLoader levelDataLoader;
+    [SerializeField] private GameStateManager gameStateManager;
+    [SerializeField] private LevelDataManager levelDataManager;
     [SerializeField] private GameScreenFitter gameScreenFitter;
     [SerializeField] private MovesManager movesManager;
     [SerializeField] private GoalManager goalManager;
@@ -12,15 +13,37 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        levelDataLoader.OnLevelInfoLoaded += OnLevelInfoLoaded;
+        gameStateManager.ChangeState(GameState.Loading);
+        SubscribeEvents();
     }
 
     private void OnDestroy()
     {
-        levelDataLoader.OnLevelInfoLoaded -= OnLevelInfoLoaded;
+        UnsubscribeEvents();
+    }
+
+    private void SubscribeEvents()
+    {
+        levelDataManager.OnLevelInfoLoaded += OnLevelInfoLoaded;
+        goalManager.OnGoalsCompleted += OnGoalsCompleted;
+        movesManager.OnOutOfMoves += OnOutOfMoves;
+    }
+
+    private void UnsubscribeEvents()
+    {
+        levelDataManager.OnLevelInfoLoaded -= OnLevelInfoLoaded;
+        goalManager.OnGoalsCompleted -= OnGoalsCompleted;
+        movesManager.OnOutOfMoves -= OnOutOfMoves;
     }
 
     private void OnLevelInfoLoaded(LevelData data)
+    {
+        SetupLevel(data);
+        gameStateManager.ChangeState(GameState.WaitScreen);
+        gameStateManager.EnqueueStateChange(GameState.Playing, 2);
+    }
+
+    private void SetupLevel(LevelData data)
     {
         gameScreenFitter.Init(data.Width, data.Height);
         movesManager.Init(data.MaxMoves);
@@ -28,5 +51,20 @@ public class GameManager : MonoBehaviour
         gridManager.Init(data.Width, data.Height);
         boardManager.Init(data.Width, data.Height, data.Tiles);
         matchingManager.Init(data.Width, data.Height);
+    }
+
+    private void OnGoalsCompleted()
+    {
+        Debug.Log("OnGoalsCompleted");
+        gameStateManager.ChangeState(GameState.LevelCompleted);
+        gameStateManager.EnqueueStateChange(GameState.NextLevelPopup, 2);
+        levelDataManager.UpdateReachedLevel();
+    }
+
+    private void OnOutOfMoves()
+    {
+        Debug.Log("OnOutOfMoves");
+        gameStateManager.ChangeState(GameState.GameOver);
+        gameStateManager.EnqueueStateChange(GameState.RetryPopup, 2);
     }
 }

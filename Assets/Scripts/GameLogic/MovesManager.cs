@@ -6,7 +6,7 @@ public class MovesManager : MonoBehaviour
     private int moves = 0;
 
     public Action<int> OnMovesChanged;
-    public Action<int> OnMovesFinished;
+    public Action OnOutOfMoves;
 
     public void Init(int maxMoves)
     {
@@ -22,6 +22,6 @@ public class MovesManager : MonoBehaviour
         moves--;
         OnMovesChanged?.Invoke(moves);
         if (moves == 0)
-            OnMovesFinished?.Invoke(moves);
+            OnOutOfMoves?.Invoke();
     }
 }

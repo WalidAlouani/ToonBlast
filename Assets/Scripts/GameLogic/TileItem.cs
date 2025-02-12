@@ -22,7 +22,7 @@ public class TileItem : MonoBehaviour
         name = $"Tile[{x},{y}]";
     }
 
-    public void UpdateCoordinates(int x, int y)
+    public void UpdateCoordinates(int x, int y, bool animate = true)
     {
         X = x;
         Y = y;

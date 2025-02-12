@@ -8,6 +8,7 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private Transform boardContainer;
     [SerializeField] private TileItem tilePrefab;
 
+    [SerializeField] private GameStateManager gameStateManager;
     [SerializeField] private InputHandler inputHandler;
     [SerializeField] private MatchingManager matchingManager;
     [SerializeField] private MovesManager movesManager;
@@ -19,7 +20,27 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
-        inputHandler.OnTileClicked += OnTileClicked;
+        gameStateManager.OnStateChanged += OnGameStateChanged;
+    }
+
+    private void OnDestroy()
+    {
+        gameStateManager.OnStateChanged -= OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.Playing:
+                inputHandler.OnTileClicked += OnTileClicked;
+                break;
+            case GameState.Paused:
+            case GameState.LevelCompleted:
+            case GameState.GameOver:
+                inputHandler.OnTileClicked -= OnTileClicked;
+                break;
+        }
     }
 
     public void Init(int width, int height, List<List<ItemType>> tileData)
@@ -53,14 +74,11 @@ public class BoardManager : MonoBehaviour
         if (matches.Count <= 0)
             return;
 
-        // Trigger any tile-specific logic
         foreach (var match in matches)
-        {
             match.Tapped();
-        }
 
-        movesManager.DecreaseMoves();
         goalManager.UpdateGoal(matches);
+        movesManager.DecreaseMoves();
 
         RearrangeBoard();
         RefillBoard();

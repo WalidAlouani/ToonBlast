@@ -9,6 +9,9 @@ public class PlayerDataManager
 
     public void SaveLastUnlockedLevel(int unlockedLevel)
     {
+        if (unlockedLevel <= GetLastUnlockedLevel())
+            return;
+
         PlayerPrefs.SetInt("UnlockedLevel", unlockedLevel);
     }
 

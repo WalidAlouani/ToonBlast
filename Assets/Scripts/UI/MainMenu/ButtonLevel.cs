@@ -15,4 +15,9 @@ public class ButtonLevel : MonoBehaviour
         button.interactable = isClickable;
         button.onClick.AddListener(onClick);
     }
+
+    private void OnDestroy()
+    {
+        button.onClick.RemoveAllListeners();
+    }
 }
