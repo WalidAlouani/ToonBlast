@@ -18,6 +18,18 @@ public enum GameState
 
 public class GameStateManager : MonoBehaviour
 {
+    private class StateChange
+    {
+        public GameState State { get; }
+        public float Duration { get; }
+
+        public StateChange(GameState state, float duration)
+        {
+            State = state;
+            Duration = duration;
+        }
+    }
+
     public GameState CurrentState { get; private set; }
 
     public Action<GameState> OnStateChanged;
@@ -51,18 +63,6 @@ public class GameStateManager : MonoBehaviour
             StateChange nextChange = stateChangeQueue.Dequeue();
             yield return new WaitForSeconds(nextChange.Duration);
             ChangeState(nextChange.State);
-        }
-    }
-
-    private class StateChange
-    {
-        public GameState State { get; }
-        public float Duration { get; }
-
-        public StateChange(GameState state, float duration)
-        {
-            State = state;
-            Duration = duration;
         }
     }
 }

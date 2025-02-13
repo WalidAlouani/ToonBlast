@@ -28,6 +28,12 @@ public class LevelDataManager : MonoBehaviour
 
     public void SelectNextLevel()
     {
-        levelDataHolder.SelectedLevel = LevelData.Number + 1;
+        var nextLevelNumber = LevelData.Number + 1;
+
+        // if we reached the last level we keep playing it
+        if (nextLevelNumber > levelDataHolder.LevelsNumbers.Count)
+            return;
+
+        levelDataHolder.SelectedLevel = nextLevelNumber;
     }
 }

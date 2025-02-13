@@ -6,14 +6,14 @@ using System.Linq;
 
 public class LevelEditorView : ILevelEditorView
 {
-    private LevelEditorController controller;
     private readonly Action<LevelEditorScreen> changeView;
-
     private readonly LevelEditorSO config;
-
+    private LevelEditorController controller;
     private LevelData currentLevel;
     private ItemType selectedItemType;
     private Dictionary<ItemType, ItemTypeSO> availableItems;
+    private Vector2 scrollPos;
+    private ItemType[] allItemTypes;
 
     public LevelEditorView(LevelEditorController controller, Action<LevelEditorScreen> changeView)
     {
@@ -22,6 +22,9 @@ public class LevelEditorView : ILevelEditorView
         config = controller.Config;
         availableItems = config.ItemInventory.ItemsByTypes;
         availableItems[ItemType.None] = config.RandomItem;
+
+        // Cache enum values (excluding None)
+        allItemTypes = EnumUtils.GetValues<ItemType>().Skip(1).ToArray();
     }
 
     public void OnEnter()
@@ -37,24 +40,55 @@ public class LevelEditorView : ILevelEditorView
 
     public void OnRender()
     {
-        // If a level is loaded, display its properties and grid
         if (currentLevel == null)
             return;
 
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+
+        RenderLevelProperties();
+        RenderLevelGoals();
+        RenderActiveItemTypes();
+        RenderItemSelectionPanel();
+        RenderGrid();
+        RenderControlButtons();
+
+        EditorGUILayout.EndScrollView();
+    }
+
+    private void RenderLevelProperties()
+    {
         GUILayout.Space(10);
         GUILayout.Label("Editing Level", EditorStyles.boldLabel);
+
         currentLevel.Number = EditorGUILayout.IntField("Number", currentLevel.Number);
         currentLevel.Width = EditorGUILayout.IntSlider("Width", currentLevel.Width, config.MinGridWidth, config.MaxGridWidth);
         currentLevel.Height = EditorGUILayout.IntSlider("Height", currentLevel.Height, config.MinGridHeight, config.MaxGridHeight);
         currentLevel.MaxMoves = EditorGUILayout.IntField("Moves", currentLevel.MaxMoves);
+    }
 
+    private void RenderLevelGoals()
+    {
         GUILayout.Space(10);
         GUILayout.Label("Level Goals", EditorStyles.boldLabel);
-        // Display the goal list
+
+        // Convert active types to an array for use in the popup
+        var activeTypes = currentLevel.ActiveTypes.ToArray();
+        string[] options = activeTypes.Select(t => t.ToString()).ToArray();
+
         for (int i = 0; i < currentLevel.LevelGoals.Count; i++)
         {
             GUILayout.BeginHorizontal();
-            currentLevel.LevelGoals[i].ItemType = (ItemType)EditorGUILayout.EnumPopup("Item Type", currentLevel.LevelGoals[i].ItemType);
+
+            // Find the index of the current level goal's type within the active types
+            int currentIndex = Array.IndexOf(activeTypes, currentLevel.LevelGoals[i].ItemType);
+            // If the current type isn't available (or wasn't set), default to the first active type
+            if (currentIndex < 0)
+                currentIndex = 0;
+
+            // Display the popup using only active types
+            int selectedIndex = EditorGUILayout.Popup("Item Type", currentIndex, options);
+            currentLevel.LevelGoals[i].ItemType = activeTypes[selectedIndex];
+
             currentLevel.LevelGoals[i].Count = EditorGUILayout.IntField("Count", currentLevel.LevelGoals[i].Count);
 
             // Remove button
@@ -63,7 +97,6 @@ public class LevelEditorView : ILevelEditorView
                 currentLevel.LevelGoals.RemoveAt(i);
                 break;
             }
-
             GUILayout.EndHorizontal();
         }
 
@@ -72,51 +105,41 @@ public class LevelEditorView : ILevelEditorView
         {
             currentLevel.LevelGoals.Add(new LevelGoal());
         }
+    }
 
+    private void RenderActiveItemTypes()
+    {
         GUILayout.Space(10);
         GUILayout.Label("Active Item Types", EditorStyles.boldLabel);
-        var allTypes = EnumUtils.GetValues<ItemType>().Skip(1).ToArray();
 
-        // Display the active types list
         for (int i = 0; i < currentLevel.ActiveTypes.Count; i++)
         {
             GUILayout.BeginHorizontal();
 
-            string[] options = allTypes.Select(e => e.ToString()).ToArray();
+            int currentIndex = Array.IndexOf(allItemTypes, currentLevel.ActiveTypes[i]);
+            if (currentIndex < 0) currentIndex = 0;
 
-            int currentIndex = Array.IndexOf(allTypes, currentLevel.ActiveTypes[i]);
-            if (currentIndex < 0)
-                currentIndex = 0;
+            int selectedIndex = EditorGUILayout.Popup("Item Type", currentIndex, allItemTypes.Select(e => e.ToString()).ToArray());
+            currentLevel.ActiveTypes[i] = allItemTypes[selectedIndex];
 
-            int selectedIndex = EditorGUILayout.Popup("Item Type", currentIndex, options);
-
-            currentLevel.ActiveTypes[i] = allTypes[selectedIndex];
-
-            // Remove button
-            if (currentLevel.ActiveTypes.Count > config.MinTypeCountPerLevel)
+            if (currentLevel.ActiveTypes.Count > config.MinTypeCountPerLevel && GUILayout.Button("X", GUILayout.Width(25)))
             {
-                if (GUILayout.Button("X", GUILayout.Width(25)))
-                {
-                    currentLevel.ActiveTypes.RemoveAt(i);
-                    break;
-                }
+                currentLevel.ActiveTypes.RemoveAt(i);
+                break;
             }
 
             GUILayout.EndHorizontal();
         }
 
-
-        if (currentLevel.ActiveTypes.Count < allTypes.Length)
+        if (currentLevel.ActiveTypes.Count < allItemTypes.Length && GUILayout.Button("+ Add Type"))
         {
-            // Add new type button
-            if (GUILayout.Button("+ Add Type"))
-            {
-                var newType = allTypes.Except(currentLevel.ActiveTypes).First();
-                currentLevel.ActiveTypes.Add(newType);
-            }
+            var newType = allItemTypes.Except(currentLevel.ActiveTypes).First();
+            currentLevel.ActiveTypes.Add(newType);
         }
+    }
 
-        //Display Items Panel
+    private void RenderItemSelectionPanel()
+    {
         GUILayout.Space(10);
         GUILayout.Label("Items Panel", EditorStyles.boldLabel);
         GUILayout.BeginHorizontal();
@@ -127,25 +150,25 @@ public class LevelEditorView : ILevelEditorView
 
         foreach (var item in availableItems)
         {
-            var itemType = item.Key;
-            if (!currentLevel.ActiveTypes.Contains(itemType) && itemType != ItemType.None)
+            if (!currentLevel.ActiveTypes.Contains(item.Key) && item.Key != ItemType.None)
                 continue;
 
-            var size = selectedItemType == itemType ? 75 : 60;
+            var size = selectedItemType == item.Key ? 75 : 60;
             if (GUILayout.Button(item.Value.Sprite.texture, GUILayout.Width(size), GUILayout.Height(size)))
             {
-                selectedItemType = itemType;
+                selectedItemType = item.Key;
             }
         }
 
         GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
+    }
 
-        //Display Grid
+    private void RenderGrid()
+    {
         GUILayout.Space(10);
         GUILayout.Label("Grid:", EditorStyles.boldLabel);
 
-        // Reverse Y to follow the ingame spawn logic
         for (int y = currentLevel.Height - 1; y >= 0; y--)
         {
             GUILayout.BeginHorizontal();
@@ -153,12 +176,10 @@ public class LevelEditorView : ILevelEditorView
 
             for (int x = 0; x < currentLevel.Width; x++)
             {
-                var itemType = currentLevel.Tiles[x][y];
+                if (!currentLevel.ActiveTypes.Contains(currentLevel.Tiles[x][y]))
+                    currentLevel.Tiles[x][y] = ItemType.None;
 
-                if(!currentLevel.ActiveTypes.Contains(itemType))
-                    currentLevel.Tiles[x][y] = itemType = ItemType.None;
-
-                var texture = availableItems[itemType].Sprite.texture;
+                var texture = availableItems[currentLevel.Tiles[x][y]].Sprite.texture;
                 if (GUILayout.Button(texture, GUILayout.Width(50), GUILayout.Height(50)))
                 {
                     currentLevel.Tiles[x][y] = selectedItemType;
@@ -168,7 +189,10 @@ public class LevelEditorView : ILevelEditorView
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
+    }
 
+    private void RenderControlButtons()
+    {
         GUILayout.Space(10);
         if (GUILayout.Button("Clear Grid"))
         {
@@ -176,7 +200,6 @@ public class LevelEditorView : ILevelEditorView
         }
 
         GUILayout.Space(10);
-        // Save Button
         if (GUILayout.Button("Save Level"))
         {
             controller.SaveLevel();
