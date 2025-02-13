@@ -1,10 +1,9 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class ButtonLevel : MonoBehaviour
+public class UI_ButtonLevel : MonoBehaviour
 {
     [SerializeField] private TMP_Text text;
     [SerializeField] private Button button;

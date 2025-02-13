@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 [Serializable]
 public class LevelData
@@ -7,6 +8,7 @@ public class LevelData
     public int Number;
     public int MaxMoves;
     public List<LevelGoal> LevelGoals;
+    public List<ItemType> ActiveTypes;
     public List<List<ItemType>> Tiles;  // Grid of tiles
 
     public int Width
@@ -72,5 +74,8 @@ public class LevelData
         }
 
         LevelGoals = new List<LevelGoal>();
+        LevelGoals.Add(new LevelGoal() { ItemType = ItemType.None, Count = 10 });
+        ActiveTypes = EnumUtils.GetValues<ItemType>().Skip(1).ToList(); // Skip None
+        MaxMoves = 10;
     }
 }

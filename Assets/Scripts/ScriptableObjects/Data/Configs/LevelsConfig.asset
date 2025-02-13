@@ -19,3 +19,4 @@ MonoBehaviour:
   MaxGridHeight: 9
   RandomItem: {fileID: 11400000, guid: df5c4c8a76277524c9adaf7fdd59e1eb, type: 2}
   ItemInventory: {fileID: 11400000, guid: 46dff3de62e685e4d842b486d6aa2de1, type: 2}
+  MinTypeCountPerLevel: 2

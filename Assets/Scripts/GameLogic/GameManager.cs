@@ -25,14 +25,14 @@ public class GameManager : MonoBehaviour
     private void SubscribeEvents()
     {
         levelDataManager.OnLevelInfoLoaded += OnLevelInfoLoaded;
-        goalManager.OnGoalsCompleted += OnGoalsCompleted;
+        goalManager.OnAllGoalsCompleted += OnGoalsCompleted;
         movesManager.OnOutOfMoves += OnOutOfMoves;
     }
 
     private void UnsubscribeEvents()
     {
         levelDataManager.OnLevelInfoLoaded -= OnLevelInfoLoaded;
-        goalManager.OnGoalsCompleted -= OnGoalsCompleted;
+        goalManager.OnAllGoalsCompleted -= OnGoalsCompleted;
         movesManager.OnOutOfMoves -= OnOutOfMoves;
     }
 
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         movesManager.Init(data.MaxMoves);
         goalManager.Init(data.LevelGoals);
         gridManager.Init(data.Width, data.Height);
-        boardManager.Init(data.Width, data.Height, data.Tiles);
+        boardManager.Init(data.Width, data.Height, data.Tiles, data.ActiveTypes);
         matchingManager.Init(data.Width, data.Height);
     }
 
@@ -64,6 +64,9 @@ public class GameManager : MonoBehaviour
     private void OnOutOfMoves()
     {
         Debug.Log("OnOutOfMoves");
+        if (goalManager.GoalCompleted)
+            return;
+
         gameStateManager.ChangeState(GameState.GameOver);
         gameStateManager.EnqueueStateChange(GameState.RetryPopup, 2);
     }

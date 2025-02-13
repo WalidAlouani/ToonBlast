@@ -1,16 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelSelectionScreen : MainMenuView
+public class UI_LevelSelectionScreen : MainMenuView
 {
     [SerializeField] private Button backButton;
     [SerializeField] private LevelsDataSO levelsData;
-    [SerializeField] private ButtonLevel buttonLevelPrefab;
+    [SerializeField] private UI_ButtonLevel buttonLevelPrefab;
     [SerializeField] private RectTransform container;
 
     private void Start()
     {
-        backButton.onClick.AddListener(() => navigation.Show<MainScreen>());
+        backButton.onClick.AddListener(() =>
+        {
+            navigation.Show<UI_MainScreen>();
+            AudioManager.Instance.PlaySound(SoundTrigger.BackButton);
+        });
         InitializeLevelButtons();
     }
 
@@ -26,7 +30,7 @@ public class LevelSelectionScreen : MainMenuView
             var button = Instantiate(buttonLevelPrefab, container);
             var levelNumber = levelsData.LevelsNumbers[i];
             var isClickable = levelNumber <= levelsData.LastUnlockedLevel;
-            button.Init(levelNumber.ToString(), isClickable,() => OnClick(levelNumber));
+            button.Init(levelNumber.ToString(), isClickable, () => OnClick(levelNumber));
         }
     }
 
@@ -34,5 +38,6 @@ public class LevelSelectionScreen : MainMenuView
     {
         levelsData.SelectedLevel = levelNumber;
         SceneLoader.Instance.LoadGameScene();
+        AudioManager.Instance.PlaySound(SoundTrigger.ClickButton);
     }
 }

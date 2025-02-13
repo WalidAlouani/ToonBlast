@@ -12,6 +12,8 @@ public class LevelEditorSO : ScriptableObject
     public int MaxGridWidth;
     public int MaxGridHeight;
 
+    [Header("Items Section")]
     public ItemTypeSO RandomItem;
     public ItemInventorySO ItemInventory;
+    public int MinTypeCountPerLevel;
 }

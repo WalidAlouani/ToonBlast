@@ -37,6 +37,15 @@ public static class ServiceLocator
         }
     }
 
+    // Check if a service exist
+    public static bool HasService<T>()
+    {
+        lock (lockObj)
+        {
+            return services.ContainsKey(typeof(T));
+        }
+    }
+
     // Retrieve a service, throws exception if not found
     public static T Get<T>()
     {

@@ -15,7 +15,7 @@ public class MainMenuNavigation : MonoBehaviour
 
     private void Start()
     {
-        Show<MainScreen>();
+        Show<UI_MainScreen>();
     }
 
     private void InitializeDictionary()

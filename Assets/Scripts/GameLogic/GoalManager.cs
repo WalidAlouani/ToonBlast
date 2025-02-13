@@ -8,7 +8,9 @@ public class GoalManager : MonoBehaviour
     private List<LevelGoal> levelGoals;
     public Action<List<LevelGoal>> OnGoalDefined;
     public Action<LevelGoal> OnGoalUpdated;
-    public Action OnGoalsCompleted;
+    public Action<LevelGoal> OnGoalCompleted;
+    public Action OnAllGoalsCompleted;
+    public bool GoalCompleted { get; private set; }
 
     public void Init(List<LevelGoal> levelGoals)
     {
@@ -28,12 +30,18 @@ public class GoalManager : MonoBehaviour
                 if (levelGoal.ItemType == item.ItemType || levelGoal.ItemType == ItemType.None)
                 {
                     levelGoal.Count--;
-                    OnGoalUpdated.Invoke(levelGoal);
+                    OnGoalUpdated?.Invoke(levelGoal);
+
+                    if (levelGoal.Count == 0)
+                        OnGoalCompleted?.Invoke(levelGoal);
                 }
             }
         }
 
         if (levelGoals.All(el => el.Count <= 0))
-            OnGoalsCompleted?.Invoke();
+        {
+            GoalCompleted = true;
+            OnAllGoalsCompleted?.Invoke();
+        }
     }
 }

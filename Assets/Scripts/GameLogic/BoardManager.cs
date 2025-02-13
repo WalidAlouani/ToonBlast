@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,8 +16,11 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private GoalManager goalManager;
 
     private TileItem[,] boardTiles;
+    private ItemType[] activeTypes;
+    private bool stopInputs = false;
 
     public Action<int, int> OnTileTapped;
+    public Action<Vector2Int, List<TileItem>> OnTilesDestroyed;
 
     private void Start()
     {
@@ -43,8 +47,9 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public void Init(int width, int height, List<List<ItemType>> tileData)
+    public void Init(int width, int height, List<List<ItemType>> tileData, List<ItemType> activeTypes)
     {
+        this.activeTypes = activeTypes.ToArray();
         boardTiles = new TileItem[width, height];
         for (int y = 0; y < height; y++)
         {
@@ -55,12 +60,12 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private TileItem CreateTile(int x, int y, ItemType tileType)
+    public TileItem CreateTile(int x, int y, ItemType tileType)
     {
         TileItem tileItem = Instantiate(tilePrefab, boardContainer);
         // Get tile type from tileData parameter
         if (tileType == ItemType.None)
-            tileType = EnumUtils.GetRandomValue<ItemType>();
+            tileType = ArrayUtils.GetRandomValue(activeTypes);
 
         var typeData = itemsInventory.GetItemByType(tileType);
         tileItem.Init(x, y, typeData);
@@ -69,7 +74,9 @@ public class BoardManager : MonoBehaviour
 
     private void OnTileClicked(GridElement element)
     {
-        List<TileItem> matches = matchingManager.FindMatches(boardTiles, element.X, element.Y);
+        if (stopInputs) return;
+
+        var matches = matchingManager.FindMatches(boardTiles, element.X, element.Y);
 
         if (matches.Count <= 0)
             return;
@@ -77,11 +84,21 @@ public class BoardManager : MonoBehaviour
         foreach (var match in matches)
             match.Tapped();
 
+        OnTilesDestroyed?.Invoke(new Vector2Int(element.X, element.Y), matches);
+
         goalManager.UpdateGoal(matches);
         movesManager.DecreaseMoves();
 
+        StartCoroutine(RearrangeAndRefill(0.2f));
+    }
+
+    private IEnumerator RearrangeAndRefill(float delay)
+    {
+        stopInputs = true;
+        yield return new WaitForSeconds(delay);
         RearrangeBoard();
         RefillBoard();
+        stopInputs = false;
     }
 
     private void RearrangeBoard()
