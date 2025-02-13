@@ -2,49 +2,52 @@
 using UnityEditor;
 using System.Collections.Generic;
 
-public class LevelEditorWindow : EditorWindow
+namespace Tools.LevelEditor
 {
-    [SerializeField] private LevelEditorSO config;
-
-    private LevelEditorController controller;
-
-    private Dictionary<LevelEditorScreen, ILevelEditorView> viewMapping;
-
-    private LevelEditorScreen currentView = LevelEditorScreen.LevelList;
-
-    [MenuItem("Tools/Level Editor")]
-    public static void ShowWindow()
+    public class LevelEditorWindow : EditorWindow
     {
-        GetWindow<LevelEditorWindow>("Level Editor");
-    }
+        [SerializeField] private LevelEditorSO config;
 
-    private void OnEnable()
-    {
-        controller = new LevelEditorController(config);
+        private LevelEditorController controller;
 
-        viewMapping = new Dictionary<LevelEditorScreen, ILevelEditorView>()
+        private Dictionary<LevelEditorScreen, ILevelEditorView> viewMapping;
+
+        private LevelEditorScreen currentView = LevelEditorScreen.LevelList;
+
+        [MenuItem("Tools/Level Editor")]
+        public static void ShowWindow()
+        {
+            GetWindow<LevelEditorWindow>("Level Editor");
+        }
+
+        private void OnEnable()
+        {
+            controller = new LevelEditorController(config);
+
+            viewMapping = new Dictionary<LevelEditorScreen, ILevelEditorView>()
         {
             { LevelEditorScreen.LevelList, new LevelListView(controller, ChangeView) },
             { LevelEditorScreen.LevelEditor, new LevelEditorView(controller, ChangeView) },
             { LevelEditorScreen.CreateLevel, new CreateLevelView(controller, ChangeView) },
         };
-    }
-
-    private void OnGUI()
-    {
-        if (config == null)
-        {
-            GUILayout.Label("No config found! Please create a config file.");
-            return;
         }
 
-        viewMapping[currentView].OnRender();
-    }
+        private void OnGUI()
+        {
+            if (config == null)
+            {
+                GUILayout.Label("No config found! Please create a config file.");
+                return;
+            }
 
-    public void ChangeView(LevelEditorScreen view)
-    {
-        viewMapping[currentView].OnExit();
-        currentView = view;
-        viewMapping[currentView].OnEnter();
+            viewMapping[currentView].OnRender();
+        }
+
+        public void ChangeView(LevelEditorScreen view)
+        {
+            viewMapping[currentView].OnExit();
+            currentView = view;
+            viewMapping[currentView].OnEnter();
+        }
     }
 }

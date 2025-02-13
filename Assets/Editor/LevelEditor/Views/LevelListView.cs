@@ -2,74 +2,78 @@
 using UnityEditor;
 using System;
 
-public class LevelListView : ILevelEditorView
+namespace Tools.LevelEditor
 {
-    private LevelEditorController controller;
-    private readonly Action<LevelEditorScreen> changeView;
-    private Vector2 scrollPos;
-
-    public LevelListView(LevelEditorController controller, Action<LevelEditorScreen> changeView)
+    public class LevelListView : ILevelEditorView
     {
-        this.controller = controller;
-        this.changeView = changeView;
-    }
+        private LevelEditorController controller;
+        private readonly Action<LevelEditorScreen> changeView;
+        private Vector2 scrollPos;
 
-    public void OnEnter() { }
-
-    public void OnExit() { }
-
-    public void OnRender()
-    {
-        DisplayLevelsList();
-        DisplayCreateLevel();
-    }
-
-    private void DisplayLevelsList()
-    {
-        GUILayout.Space(10);
-        GUILayout.Label("Levels List", EditorStyles.boldLabel);
-
-        // Refresh Button
-        if (GUILayout.Button("Refresh Level List"))
+        public LevelListView(LevelEditorController controller, Action<LevelEditorScreen> changeView)
         {
-            controller.RefreshLevelList();
+            this.controller = controller;
+            this.changeView = changeView;
         }
 
-        // Display available level files
-        scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(400));
-        for (int i = 0; i < controller.LevelFiles.Count; i++)
+        public void OnEnter() { }
+
+        public void OnExit() { }
+
+        public void OnRender()
         {
-            GUILayout.BeginHorizontal();
+            DisplayLevelsList();
+            DisplayCreateLevel();
+        }
 
-            var fileName = controller.LevelFiles[i];
+        private void DisplayLevelsList()
+        {
+            GUILayout.Space(10);
+            GUILayout.Label("Levels List", EditorStyles.boldLabel);
 
-            // Load level button
-            if (GUILayout.Button(fileName, EditorStyles.miniButtonLeft))
+            // Refresh Button
+            if (GUILayout.Button("Refresh Level List"))
             {
-                controller.LoadLevel(fileName);
-                changeView.Invoke(LevelEditorScreen.LevelEditor);
+                controller.RefreshLevelList();
             }
 
-            // Delete level button
-            if (GUILayout.Button("X", EditorStyles.miniButtonRight, GUILayout.Width(25)))
+            // Display available level files
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(400));
+            for (int i = 0; i < controller.LevelFiles.Count; i++)
             {
-                if (EditorUtility.DisplayDialog("Delete Level", $"Are you sure you want to delete {fileName}?", "Yes", "No"))
+                GUILayout.BeginHorizontal();
+
+                var fileName = controller.LevelFiles[i];
+
+                // Load level button
+                if (GUILayout.Button(fileName, EditorStyles.miniButtonLeft))
                 {
-                    controller.DeleteLevel(fileName);
+                    controller.LoadLevel(fileName);
+                    changeView.Invoke(LevelEditorScreen.LevelEditor);
                 }
-            }
 
-            GUILayout.EndHorizontal();
+                // Delete level button
+                if (GUILayout.Button("X", EditorStyles.miniButtonRight, GUILayout.Width(25)))
+                {
+                    if (EditorUtility.DisplayDialog("Delete Level", $"Are you sure you want to delete {fileName}?", "Yes", "No"))
+                    {
+                        controller.DeleteLevel(fileName);
+                    }
+                }
+
+                GUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndScrollView();
         }
-        EditorGUILayout.EndScrollView();
-    }
-    private void DisplayCreateLevel()
-    {
-        // Create New Level
-        GUILayout.Space(10);
-        if (GUILayout.Button("Create New Level"))
+
+        private void DisplayCreateLevel()
         {
-            changeView.Invoke(LevelEditorScreen.CreateLevel);
+            // Create New Level
+            GUILayout.Space(10);
+            if (GUILayout.Button("Create New Level"))
+            {
+                changeView.Invoke(LevelEditorScreen.CreateLevel);
+            }
         }
     }
 }

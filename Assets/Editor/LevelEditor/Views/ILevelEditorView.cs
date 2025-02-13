@@ -1,6 +1,9 @@
-﻿public interface ILevelEditorView
+﻿namespace Tools.LevelEditor
 {
-    void OnEnter();
-    void OnExit();
-    void OnRender();
+    public interface ILevelEditorView
+    {
+        void OnEnter();
+        void OnExit();
+        void OnRender();
+    }
 }

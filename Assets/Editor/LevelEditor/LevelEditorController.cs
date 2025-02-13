@@ -1,56 +1,59 @@
 ﻿using System.Collections.Generic;
 
-public class LevelEditorController
+namespace Tools.LevelEditor
 {
-    public LevelEditorSO Config { get; private set; }
-    public List<string> LevelFiles { get; private set; }
-    public LevelData CurrentLevel { get; private set; }
-
-    private LevelFileHandler fileHandler;
-
-    public LevelEditorController(LevelEditorSO config)
+    public class LevelEditorController
     {
-        fileHandler = new LevelFileHandler(new LevelSerializer(), config.SaveDirectory);
-        Config = config;
-        RefreshLevelList();
-    }
+        public LevelEditorSO Config { get; private set; }
+        public List<string> LevelFiles { get; private set; }
+        public LevelData CurrentLevel { get; private set; }
 
-    public void RefreshLevelList()
-    {
-        LevelFiles = fileHandler.GetLevelsNames();
-    }
+        private LevelFileHandler fileHandler;
 
-    public void LoadLevel(string fileName)
-    {
-        CurrentLevel = fileHandler.LoadLevel(fileName);
-    }
+        public LevelEditorController(LevelEditorSO config)
+        {
+            fileHandler = new LevelFileHandler(new LevelSerializer(), config.SaveDirectory);
+            Config = config;
+            RefreshLevelList();
+        }
 
-    public void SaveLevel()
-    {
-        if (CurrentLevel == null)
-            return;
+        public void RefreshLevelList()
+        {
+            LevelFiles = fileHandler.GetLevelsNames();
+        }
 
-        fileHandler.SaveLevel(CurrentLevel);
-        RefreshLevelList();
-    }
+        public void LoadLevel(string fileName)
+        {
+            CurrentLevel = fileHandler.LoadLevel(fileName);
+        }
 
-    public void DeleteLevel(string fileName)
-    {
-        fileHandler.DeleteLevel(fileName);
-        RefreshLevelList();
-    }
+        public void SaveLevel()
+        {
+            if (CurrentLevel == null)
+                return;
 
-    public void CreateLevel()
-    {
-        var levelNumber = fileHandler.MaxLevelNumber() + 1;
-        CurrentLevel = new LevelData(levelNumber, Config.MinGridWidth, Config.MinGridHeight);
-    }
+            fileHandler.SaveLevel(CurrentLevel);
+            RefreshLevelList();
+        }
 
-    public bool OverwriteCheck()
-    {
-        if (CurrentLevel == null)
-            return false;
+        public void DeleteLevel(string fileName)
+        {
+            fileHandler.DeleteLevel(fileName);
+            RefreshLevelList();
+        }
 
-        return fileHandler.IsLevelFileExist(CurrentLevel);
+        public void CreateLevel()
+        {
+            var levelNumber = fileHandler.MaxLevelNumber() + 1;
+            CurrentLevel = new LevelData(levelNumber, Config.MinGridWidth, Config.MinGridHeight);
+        }
+
+        public bool OverwriteCheck()
+        {
+            if (CurrentLevel == null)
+                return false;
+
+            return fileHandler.IsLevelFileExist(CurrentLevel);
+        }
     }
 }
