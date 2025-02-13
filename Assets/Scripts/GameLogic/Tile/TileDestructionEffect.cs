@@ -41,7 +41,7 @@ public class TileDestructionEffect : MonoBehaviour
                         newTile.transform
                         .DOLocalMove(finalDestination, duration * 0.65f)
                         .SetEase(ease)
-                        .OnComplete(() => Destroy(newTile.gameObject)));
+                        .OnComplete(() =>  newTile.Destroy()));
             }
         }
         else
@@ -57,7 +57,7 @@ public class TileDestructionEffect : MonoBehaviour
                         newTile.transform
                         .DOScale(0.2f, duration * 0.4f)
                         .SetEase(ease)
-                        .OnComplete(() => Destroy(newTile.gameObject)));
+                        .OnComplete(() => newTile.Destroy()));
             }
         }
     }

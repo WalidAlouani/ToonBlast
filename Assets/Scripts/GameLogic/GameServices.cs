@@ -6,10 +6,8 @@ public class GameServices : MonoBehaviour
 
     private void Awake()
     {
-        if (!ServiceLocator.HasService<LevelFileHandler>())
-            ServiceLocator.Register(new LevelFileHandler(new LevelSerializer(), levelsConfig.SaveDirectory));
-        if (!ServiceLocator.HasService<PlayerDataManager>())
-            ServiceLocator.Register(new PlayerDataManager());
+        ServiceLocator.Register(new LevelFileHandler(new LevelSerializer(), levelsConfig.SaveDirectory));
+        ServiceLocator.Register(new PlayerDataManager());
     }
 
     private void OnApplicationQuit()

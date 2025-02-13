@@ -14,13 +14,21 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private MatchingManager matchingManager;
     [SerializeField] private MovesManager movesManager;
     [SerializeField] private GoalManager goalManager;
+    [SerializeField] private int fallOffset = 10;
 
     private TileItem[,] boardTiles;
     private ItemType[] activeTypes;
+    private ObjectPool<TileItem> tilePool;
     private bool stopInputs = false;
 
     public Action<int, int> OnTileTapped;
     public Action<Vector2Int, List<TileItem>> OnTilesDestroyed;
+
+
+    private void Awake()
+    {
+        tilePool = new ObjectPool<TileItem>(tilePrefab, boardContainer);
+    }
 
     private void Start()
     {
@@ -62,7 +70,9 @@ public class BoardManager : MonoBehaviour
 
     public TileItem CreateTile(int x, int y, ItemType tileType)
     {
-        TileItem tileItem = Instantiate(tilePrefab, boardContainer);
+        var tileItem = tilePool.Get();
+
+        tileItem.OnDestroy += OnTileDestroyed;
         // Get tile type from tileData parameter
         if (tileType == ItemType.None)
             tileType = ArrayUtils.GetRandomValue(activeTypes);
@@ -81,8 +91,8 @@ public class BoardManager : MonoBehaviour
         if (matches.Count <= 0)
             return;
 
-        foreach (var match in matches)
-            match.Tapped();
+        foreach (var tile in matches)
+            tile.Destroy();
 
         OnTilesDestroyed?.Invoke(new Vector2Int(element.X, element.Y), matches);
 
@@ -142,9 +152,17 @@ public class BoardManager : MonoBehaviour
                     continue;
 
                 // Create a random new tile with a falling effect (offset position)
-                boardTiles[x, y] = CreateTile(x, y + 5, ItemType.None);
+                boardTiles[x, y] = CreateTile(x, y + fallOffset, ItemType.None);
                 boardTiles[x, y].UpdateCoordinates(x, y);
             }
         }
+    }
+
+    private void OnTileDestroyed(TileItem tileItem)
+    {
+        tileItem.OnDestroy -= OnTileDestroyed;
+        if (boardTiles[tileItem.X, tileItem.Y] == tileItem)
+            boardTiles[tileItem.X, tileItem.Y] = null;
+        tilePool.ReturnToPool(tileItem);
     }
 }

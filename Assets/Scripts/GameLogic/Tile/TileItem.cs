@@ -1,7 +1,8 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
-public class TileItem : MonoBehaviour
+public class TileItem : MonoBehaviour, IPoolable
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private float animationDuration = 0.35f;
@@ -11,6 +12,8 @@ public class TileItem : MonoBehaviour
     public ItemType ItemType => data.Type;
     public int X { get; private set; }
     public int Y { get; private set; }
+
+    public Action<TileItem> OnDestroy;
 
     public void Init(int x, int y, ItemTypeSO typeData)
     {
@@ -33,8 +36,18 @@ public class TileItem : MonoBehaviour
             transform.localPosition = new Vector2(x, y);
     }
 
-    public void Tapped()
+    public void Destroy()
     {
-        DestroyImmediate(gameObject);
+        OnDestroy?.Invoke(this);
+    }
+
+    public void OnCreate()
+    {
+    }
+
+    public void OnRelease()
+    {
+        transform.localScale = Vector3.one;
+        transform.localPosition = -Vector3.one;
     }
 }

@@ -1,14 +1,13 @@
 using System.Collections;
 using DG.Tweening;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SceneLoader : Singleton<SceneLoader>
 {
-    [SerializeField] private SceneAsset menuSceneName;
-    [SerializeField] private SceneAsset gameSceneName;
+    [SerializeField] private string menuSceneName;
+    [SerializeField] private string gameSceneName;
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private float fakeProgressDuration = 2f;
     [SerializeField] private float fadeInDuration = 0.5f;
@@ -23,13 +22,13 @@ public class SceneLoader : Singleton<SceneLoader>
 
     public void LoadMenuScene()
     {
-        this.levelName = menuSceneName.name;
+        this.levelName = menuSceneName;
         StartCoroutine(LoadLevelAsync());
     }
 
     public void LoadGameScene()
     {
-        this.levelName = gameSceneName.name;
+        this.levelName = gameSceneName;
         StartCoroutine(LoadLevelAsync());
     }
 

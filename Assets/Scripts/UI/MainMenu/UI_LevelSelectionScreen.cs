@@ -29,8 +29,8 @@ public class UI_LevelSelectionScreen : MainMenuView
         {
             var button = Instantiate(buttonLevelPrefab, container);
             var levelNumber = levelsData.LevelsNumbers[i];
-            var isClickable = levelNumber <= levelsData.LastUnlockedLevel;
-            button.Init(levelNumber.ToString(), isClickable, () => OnClick(levelNumber));
+            var isUnlocked = levelNumber <= levelsData.LastUnlockedLevel;
+            button.Init(levelNumber.ToString(), isUnlocked, () => OnClick(levelNumber));
         }
     }
 

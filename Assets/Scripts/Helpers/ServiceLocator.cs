@@ -27,12 +27,6 @@ public static class ServiceLocator
         services.Remove(typeof(T));
     }
 
-    // Check if a service exist
-    public static bool HasService<T>()
-    {
-        return services.ContainsKey(typeof(T));
-    }
-
     // Retrieve a service, throws exception if not found
     public static T Get<T>()
     {
