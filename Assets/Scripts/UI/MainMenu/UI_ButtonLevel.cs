@@ -12,7 +12,6 @@ public class UI_ButtonLevel : MonoBehaviour
     [SerializeField] private Sprite emptyStar;
     [SerializeField] private Image[] stars;
 
-
     public void Init(string levelNumber, bool isUnlocked, UnityAction onClick)
     {
         text.text = levelNumber;

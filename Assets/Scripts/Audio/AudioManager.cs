@@ -22,6 +22,11 @@ public class AudioManager : Singleton<AudioManager>
         audioSource.PlayOneShot(soundClip);
     }
 
+    public bool IsMuted()
+    {
+        return audioSource.mute;
+    }
+
     public void Mute(bool isSoundMuted)
     {
         audioSource.mute = isSoundMuted;

@@ -4,14 +4,19 @@ using UnityEngine.UI;
 
 public class UI_GameManager : MonoBehaviour
 {
-    [SerializeField] private GameStateManager gameStateManager; 
-    [SerializeField] private UI_LevelCompletePopup levelCompletePopup; 
-    [SerializeField] private UI_OutOfMovesPopup outOfMovesPopup; 
-    [SerializeField] private Button backButton; 
+    [SerializeField] private GameStateManager gameStateManager;
+    [SerializeField] private UI_LevelCompletePopup levelCompletePopup;
+    [SerializeField] private UI_OutOfMovesPopup outOfMovesPopup;
+    [SerializeField] private UI_QuitPopup quitPopup;
+    [SerializeField] private Button backButton;
 
     void Start()
     {
-        backButton.onClick.AddListener(()=> SceneLoader.Instance.LoadMenuScene());
+        backButton.onClick.AddListener(() =>
+        {
+            if (gameStateManager.CurrentState == GameState.Playing)
+                gameStateManager.ChangeState(GameState.Paused);
+        });
         gameStateManager.OnStateChanged += OnGameStateChanged;
     }
 
@@ -25,27 +30,17 @@ public class UI_GameManager : MonoBehaviour
     {
         switch (state)
         {
-            case GameState.None:
-                break;
-            case GameState.Loading:
-                break;
-            case GameState.WaitScreen:
-                break;
             case GameState.Playing:
+                quitPopup.gameObject.SetActive(false);
                 break;
             case GameState.Paused:
-                break;
-            case GameState.LevelCompleted:
-                break;
-            case GameState.GameOver:
+                quitPopup.gameObject.SetActive(true);
                 break;
             case GameState.NextLevelPopup:
                 levelCompletePopup.gameObject.SetActive(true);
                 break;
             case GameState.RetryPopup:
                 outOfMovesPopup.gameObject.SetActive(true);
-                break;
-            default:
                 break;
         }
     }

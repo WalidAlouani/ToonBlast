@@ -3,31 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_LevelCompletePopup : MonoBehaviour
+public class UI_QuitPopup : MonoBehaviour
 {
-    [SerializeField] private LevelDataManager levelDataManager;
+    [SerializeField] private GameStateManager gameStateManager;
     [SerializeField] private Button closeButton;
-    [SerializeField] private Button nextLevelButton;
+    [SerializeField] private Button quitButton;
 
     private void Start()
     {
         closeButton.onClick.AddListener(() =>
         {
-            SceneLoader.Instance.LoadMenuScene();
             AudioManager.Instance.PlaySound(SoundTrigger.CloseButton);
+            gameStateManager.ChangeState(GameState.Playing);
         });
 
-        nextLevelButton.onClick.AddListener(() =>
+        quitButton.onClick.AddListener(() =>
         {
-            levelDataManager.SelectNextLevel();
             AudioManager.Instance.PlaySound(SoundTrigger.ClickButton);
-            SceneLoader.Instance.LoadGameScene();
+            SceneLoader.Instance.LoadMenuScene();
         });
     }
 
     private void OnDestroy()
     {
         closeButton.onClick.RemoveAllListeners();
-        nextLevelButton.onClick.RemoveAllListeners();
+        quitButton.onClick.RemoveAllListeners();
     }
 }

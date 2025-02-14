@@ -8,8 +8,17 @@ public class UI_OutOfMovesPopup : MonoBehaviour
 
     private void Start()
     {
-        closeButton.onClick.AddListener(() => SceneLoader.Instance.LoadMenuScene());
-        tryAgainButton.onClick.AddListener(() => { SceneLoader.Instance.LoadGameScene(); });
+        closeButton.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlaySound(SoundTrigger.CloseButton);
+            SceneLoader.Instance.LoadMenuScene();
+
+        });
+        tryAgainButton.onClick.AddListener(() =>
+        {
+            AudioManager.Instance.PlaySound(SoundTrigger.ClickButton);
+            SceneLoader.Instance.LoadGameScene();
+        });
     }
 
     private void OnDestroy()

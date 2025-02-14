@@ -29,6 +29,6 @@ public class InputHandler : MonoBehaviour
             return;
 
         OnTileClicked?.Invoke(gridElement);
-        Debug.Log("Tile clicked: " + gridElement.X + " " + gridElement.Y);
+        //Debug.Log("Tile clicked: " + gridElement.X + " " + gridElement.Y);
     }
 }

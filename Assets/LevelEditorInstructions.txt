@@ -1,0 +1,35 @@
+# Level Editor Instructions
+
+## 1. Introduction
+This Level Editor allows you to create, edit, and manage game levels within Unity.
+
+## 2. Setup Instructions
+- **Configuration:** Ensure that 'LevelEditorWindow' script is referencing a valid 'LevelEditorConfig.asset' file.
+- **Opening the Editor:** Navigate to ** Tools > Level Editor** in the Unity menu.
+
+## 3. Using the Editor
+### Main Menu
+- **Create New Level:** Click "Create New Level" to start building a new level.
+- **Load Level:** Click on a level from the list to edit it.
+- **Delete Level** Click the "X" button next to the level name to delete it.
+
+### Level Editor Screen
+- **Editing Level Data:** 
+	+ Modify fields such as level number, grid dimensions, and moves.
+	+ Specify level goals.
+	+ Specify the tile types available for the level.
+	+ Define the initial grid layout.
+
+- **Grid Editing:** Click on a grid cell to place or change an item.
+- **Saving:** Click "Save Level" to store your changes. (Note: Existing levels will prompt for overwrite confirmation.)
+
+## 4. Best Practices
+- Create levels in a logical sequence.
+- Verify your changes before saving.
+- Maintain backups through version control.
+
+## 5. Troubleshooting & FAQs
+- **Config Not Found:** Ensure that the config file is in the correct folder.
+
+## 6. Things To Improve
+- **Enhanced UI/UX.
