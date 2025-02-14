@@ -50,7 +50,7 @@ public class GameStateManager : MonoBehaviour
     {
         stateChangeQueue.Enqueue(new StateChange(newState, duration));
 
-        if (stateChangeQueue.Count == 1) // Start the coroutine only if the queue was empty
+        if (stateChangeQueue.Count == 1)
         {
             StartCoroutine(ProcessStateQueue());
         }

@@ -1,0 +1,47 @@
+# Test Project Overview
+
+First, I congratulate you on the choice of the test. It was fun and challenging!
+
+## General Thoughts & Planning
+- **Day 1:** Level Editor (window, save/load logic, level data)
+- **Day 2:** Main Menu (level selection, scene changes)
+- **Day 3+4:** Game Core Mechanic (inputs, grid, tiles, gameplay, goals)
+- **Day 5:** Game Loop (win/lose conditions) + Animations + Optimization (PoolingSystem)
+- **Day 6:** Assets Integration (UI, Sounds) + Code Refactoring
+
+
+## Project Architecture Overview
+
+1. Use of ScriptableObjects for Data Management
+ScriptableObjects are used to separate the data layer, making it easier to modify and access configuration data without altering game logic.
+
+- Level Editor Configuration: Stores level creation properties, allowing easy adjustments during level design.
+- Item Types: New item types can be added by creating a new ScriptableObject and adding it to the ItemInventory, eliminating the need for code modifications.
+- Level Data Holder: Preloads level data for easy access from both the menu and game scenes.
+
+2. Modular and Single Responsibility Design
+Managers are structured to follow the Single Responsibility Principle (SRP), ensuring each class has a well-defined role.
+
+- GridManager: Handles grid structure and placement.
+- BoardManager: Manages tile spawning, interactions, and board logic.
+
+3. Separation of UI Logic from Game Logic
+UI-related logic is kept separate from game mechanics, improving maintainability.
+
+- MovesManager: Handles move-related logic.
+- UI_MovesManager: Manages the UI representation of moves.
+
+4. Event-Driven Design for Decoupling
+An event-based system is used to reduce dependencies between different components.
+
+- UI_GoalManager subscribes to GoalManager events to update UI dynamically.
+
+5. Abstraction for Modularity and Extensibility
+The codebase is designed to be easily extensible through abstraction.
+
+- InputHandler accepts an abstract InputSource, allowing additional input sources (e.g., touch, keyboard, controller) without modifying existing code.
+
+6.Optimization: Object Pooling for Tile Management
+To optimize performance and reduce instantiation overhead, an object pooling system was implemented for tile spawning.
+
+- Tile Pooling: Instead of creating and destroying tiles dynamically, an ObjectPool<TileItem> is used to reuse inactive tiles, reducing memory allocation and garbage collection.

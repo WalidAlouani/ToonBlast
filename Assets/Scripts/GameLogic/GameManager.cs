@@ -55,19 +55,19 @@ public class GameManager : MonoBehaviour
 
     private void OnGoalsCompleted()
     {
-        Debug.Log("OnGoalsCompleted");
         gameStateManager.ChangeState(GameState.LevelCompleted);
         gameStateManager.EnqueueStateChange(GameState.NextLevelPopup, 2);
         levelDataManager.UpdateReachedLevel();
+        //Debug.Log("All Goal Completed");
     }
 
     private void OnOutOfMoves()
     {
-        Debug.Log("OnOutOfMoves");
         if (goalManager.GoalCompleted)
             return;
 
         gameStateManager.ChangeState(GameState.GameOver);
         gameStateManager.EnqueueStateChange(GameState.RetryPopup, 2);
+        //Debug.Log("Out Of Moves");
     }
 }
