@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -41,7 +40,6 @@ public class GameStateManager : MonoBehaviour
 
         CurrentState = newState;
 
-        //EventManager.GameStateChanged(newState);
         ServiceLocator.Get<EventManager>().OnGameStateChanged.Publish(newState);
 
         Debug.Log($"GameState: {CurrentState}");

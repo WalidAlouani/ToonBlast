@@ -6,13 +6,12 @@ public class BoardManager : MonoBehaviour
 {
     [SerializeField] private TileFactory tileFactory;
     [SerializeField] private InputHandler inputHandler;
+    [SerializeField] private BoardAnimationController animationController;
     [SerializeField] private int fallOffset = 10;
-    [SerializeField] private float fallDuration = 0.3f;
-    [SerializeField] private float rearrangeDuration = 0.3f;
 
     private TileBoard board;
 
-    // Add Board state manager
+    // Add BoardStateManager
     private bool blockInputs = false;
 
     private void OnEnable()
@@ -51,13 +50,13 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private TileItem CreateTile(int x, int y, ItemType itemType)
+    private TileItem CreateTile(int x, int y, ItemType itemType = ItemType.None)
     {
         var tileItem = tileFactory.CreateTile(x, y, itemType);
         board.SetElement(tileItem);
 
         tileItem.OnClick += OnTileClicked;
-        tileItem.OnDestroy += OnTileDestoyed;
+        tileItem.OnDestroy += OnTileDestroyed;
 
         return tileItem;
     }
@@ -95,13 +94,13 @@ public class BoardManager : MonoBehaviour
         StartCoroutine(RearrangeAndRefill());
     }
 
-    private void OnTileDestoyed(TileItem tileItem)
+    private void OnTileDestroyed(TileItem tileItem)
     {
         tileItem.OnClick -= OnTileClicked;
-        tileItem.OnDestroy -= OnTileDestoyed;
+        tileItem.OnDestroy -= OnTileDestroyed;
 
-        if (!board.IsEqualTo(tileItem.X, tileItem.Y, tileItem))
-            return;
+        //if (!board.IsEqualTo(tileItem.X, tileItem.Y, tileItem))
+        //    return;
 
         board.RemoveElement(tileItem.X, tileItem.Y);
     }
@@ -109,9 +108,9 @@ public class BoardManager : MonoBehaviour
     private IEnumerator RearrangeAndRefill()
     {
         blockInputs = true;
-        yield return new WaitForSeconds(Mathf.Max(rearrangeDuration, fallDuration));
         RearrangeBoard();
         RefillBoard();
+        yield return new WaitForSeconds(animationController.RefillAndFallDuration);
         blockInputs = false;
     }
 
@@ -132,7 +131,11 @@ public class BoardManager : MonoBehaviour
 
             // Swap the tile to the new position
             board.SwapElements(x, targetY, x, y);
-            board.GetElement(x, targetY).SetPosition(x, targetY, rearrangeDuration);
+            
+            var tileItem = board.GetElement(x, targetY);
+
+            // Tile rearrange animation
+            animationController.RearrangeAnimation(tileItem, new Vector2Int(x, targetY));
         });
     }
 
@@ -143,11 +146,11 @@ public class BoardManager : MonoBehaviour
             if (!board.ElementIsNull(x, y) || !board.IsColumnClearAbove(x, y))
                 return;
 
-            // Create a random new tile with a falling effect (offset position)
-            var tileItem = CreateTile(x, y, ItemType.None); ;
+            // Create a random new tile 
+            var tileItem = CreateTile(x, y);
 
-            tileItem.SetPosition(x, y + fallOffset);
-            tileItem.SetPosition(x, y, fallDuration);
+            // Tile fall animation
+            animationController.FallAnimation(tileItem, new Vector2Int(x, y + fallOffset), new Vector2Int(x, y));
         });
     }
 }

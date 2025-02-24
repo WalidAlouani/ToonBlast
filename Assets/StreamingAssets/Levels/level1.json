@@ -1,1 +1,1 @@
-{"Number":1,"MaxMoves":20,"LevelGoals":[{"ItemType":2,"Count":15},{"ItemType":2,"Count":15},{"ItemType":5,"Count":3}],"ActiveTypes":[1,2,3,4,5],"Tiles":[[2,2,1,1,1],[2,2,5,4,4],[2,2,5,4,4],[2,2,5,4,4],[3,3,3,4,4]],"Width":5,"Height":5}
+{"Number":1,"MaxMoves":20,"LevelGoals":[{"ItemType":2,"Count":15},{"ItemType":4,"Count":15},{"ItemType":5,"Count":3}],"ActiveTypes":[1,2,3,4,5],"Tiles":[[2,2,1,1,1],[2,2,5,4,4],[2,2,5,4,4],[2,2,5,4,4],[3,3,3,4,4]],"Width":5,"Height":5}
