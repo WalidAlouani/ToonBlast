@@ -3,6 +3,7 @@
 First, I congratulate you on the choice of the test. It was fun and challenging!
 
 ## General Thoughts & Planning
+
 - **Day 1:** Level Editor (window, save/load logic, level data)
 - **Day 2:** Main Menu (level selection, scene changes)
 - **Day 3+4:** Game Core Mechanic (inputs, grid, tiles, gameplay, goals)
@@ -11,6 +12,9 @@ First, I congratulate you on the choice of the test. It was fun and challenging!
 
 
 ## Project Architecture Overview
+
+Some example about how The code is structured to keep game logic and UI code distinct, ensuring reusability and ease of extension.  
+It also favors external data hooks for game parameters over hard-coding values.
 
 1. Use of ScriptableObjects for Data Management
 ScriptableObjects are used to separate the data layer, making it easier to modify and access configuration data without altering game logic.
@@ -28,16 +32,16 @@ Managers are structured to follow the Single Responsibility Principle (SRP), ens
 3. Separation of UI Logic from Game Logic
 UI-related logic is kept separate from game mechanics, improving maintainability.
 
-- MovesManager: Handles move-related logic.
+- MovesManager: Handles moves count logic.
 - UI_MovesManager: Manages the UI representation of moves.
 
 4. Event-Driven Design for Decoupling
-An event-based system is used to reduce dependencies between different components.
+Using event-based system to reduce dependencies between different components.
 
 - UI_GoalManager subscribes to GoalManager events to update UI dynamically.
 
 5. Abstraction for Modularity and Extensibility
-The codebase is designed to be easily extensible through abstraction.
+Using abstraction.
 
 - InputHandler accepts an abstract InputSource, allowing additional input sources (e.g., touch, keyboard, controller) without modifying existing code.
 
@@ -45,3 +49,8 @@ The codebase is designed to be easily extensible through abstraction.
 To optimize performance and reduce instantiation overhead, an object pooling system was implemented for tile spawning.
 
 - Tile Pooling: Instead of creating and destroying tiles dynamically, an ObjectPool<TileItem> is used to reuse inactive tiles, reducing memory allocation and garbage collection.
+
+## Pending Features
+- Music system
+- XP and star rating system per level
+- Hearts system

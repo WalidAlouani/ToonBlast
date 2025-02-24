@@ -5,12 +5,23 @@ using UnityEngine;
 
 public class GoalManager : MonoBehaviour
 {
-    private List<LevelGoal> levelGoals;
     public Action<List<LevelGoal>> OnGoalDefined;
     public Action<LevelGoal> OnGoalUpdated;
     public Action<LevelGoal> OnGoalCompleted;
     public Action OnAllGoalsCompleted;
-    public bool GoalCompleted { get; private set; }
+
+    private List<LevelGoal> levelGoals;
+
+    private void OnEnable()
+    {
+        ServiceLocator.Get<EventManager>().OnTilesDestroyed.Subscribe(UpdateGoal, this, 1);
+    }
+
+    private void OnDisable()
+    {
+        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
+            eventManager.OnTilesDestroyed.Unsubscribe(UpdateGoal);
+    }
 
     public void Init(List<LevelGoal> levelGoals)
     {
@@ -40,7 +51,6 @@ public class GoalManager : MonoBehaviour
 
         if (levelGoals.All(el => el.Count <= 0))
         {
-            GoalCompleted = true;
             OnAllGoalsCompleted?.Invoke();
         }
     }

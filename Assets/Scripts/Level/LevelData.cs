@@ -9,7 +9,7 @@ public class LevelData
     public int MaxMoves;
     public List<LevelGoal> LevelGoals;
     public List<ItemType> ActiveTypes;
-    public List<List<ItemType>> Tiles;  // Grid of tiles
+    public List<List<ItemType>> Tiles;
 
     public int Width
     {
@@ -73,8 +73,10 @@ public class LevelData
             Tiles.Add(row);
         }
 
-        LevelGoals = new List<LevelGoal>();
-        LevelGoals.Add(new LevelGoal() { ItemType = ItemType.None, Count = 10 });
+        LevelGoals = new List<LevelGoal>
+        {
+            new LevelGoal() { ItemType = ItemType.None, Count = 10 }
+        };
         ActiveTypes = EnumUtils.GetValues<ItemType>().Skip(1).ToList(); // Skip None
         MaxMoves = 10;
     }

@@ -32,8 +32,6 @@ public class GameStateManager : MonoBehaviour
 
     public GameState CurrentState { get; private set; }
 
-    public Action<GameState> OnStateChanged;
-
     private Queue<StateChange> stateChangeQueue = new Queue<StateChange>();
 
     public void ChangeState(GameState newState)
@@ -42,7 +40,10 @@ public class GameStateManager : MonoBehaviour
             return;
 
         CurrentState = newState;
-        OnStateChanged?.Invoke(newState);
+
+        //EventManager.GameStateChanged(newState);
+        ServiceLocator.Get<EventManager>().OnGameStateChanged.Publish(newState);
+
         Debug.Log($"GameState: {CurrentState}");
     }
 

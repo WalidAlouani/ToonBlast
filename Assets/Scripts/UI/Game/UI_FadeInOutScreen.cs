@@ -4,17 +4,17 @@ using UnityEngine.UI;
 
 public class UI_FadeInOutScreen : MonoBehaviour
 {
-    [SerializeField] private GameStateManager gameStateManager;
     [SerializeField] private Image image;
 
-    private void Awake()
+    private void OnEnable()
     {
-        gameStateManager.OnStateChanged += OnGameStateChanged;
+        ServiceLocator.Get<EventManager>().OnGameStateChanged.Subscribe(OnGameStateChanged, this);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        gameStateManager.OnStateChanged -= OnGameStateChanged;
+        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
+            eventManager.OnGameStateChanged.Unsubscribe(OnGameStateChanged);
     }
 
     private void OnGameStateChanged(GameState state)

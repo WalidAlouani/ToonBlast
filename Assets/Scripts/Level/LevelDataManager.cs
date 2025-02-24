@@ -22,7 +22,7 @@ public class LevelDataManager : MonoBehaviour
 
     public void UpdateReachedLevel()
     {
-        var playerData = ServiceLocator.Get<PlayerDataManager>();
+        var playerData = ServiceLocator.Get<IPlayerDataManager>();
         playerData.SaveLastUnlockedLevel(LevelData.Number + 1);
     }
 

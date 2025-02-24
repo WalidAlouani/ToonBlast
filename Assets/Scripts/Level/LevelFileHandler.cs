@@ -25,7 +25,7 @@ public class LevelFileHandler
 
     public List<string> GetLevelsNames()
     {
-        var files = Directory.GetFiles(levelsDirectory, "*.json");
+        var files = Directory.GetFiles(levelsDirectory, "*." + serializer.FileExtension);
 
         return files.Select(Path.GetFileName)
             .OrderBy(FileUtils.ExtractLevelNumber)
@@ -34,7 +34,7 @@ public class LevelFileHandler
 
     public List<int> GetLevelsNumbers()
     {
-        var files = Directory.GetFiles(levelsDirectory, "*.json");
+        var files = Directory.GetFiles(levelsDirectory, "*." + serializer.FileExtension);
 
         return files.Select(FileUtils.ExtractLevelNumber)
             .OrderBy(el => el)
@@ -43,7 +43,7 @@ public class LevelFileHandler
 
     public bool IsLevelFileExist(LevelData level)
     {
-        string path = Path.Combine(levelsDirectory, $"level{level.Number}.json");
+        string path = Path.Combine(levelsDirectory, $"level{level.Number}." + serializer.FileExtension);
         return File.Exists(path);
     }
 
@@ -55,13 +55,13 @@ public class LevelFileHandler
 
     public LevelData LoadLevel(int levelNumber)
     {
-        string path = Path.Combine(levelsDirectory, $"level{levelNumber}.json");
+        string path = Path.Combine(levelsDirectory, $"level{levelNumber}." + serializer.FileExtension);
         return serializer.Load(path);
     }
 
     public void SaveLevel(LevelData level)
     {
-        string path = Path.Combine(levelsDirectory, $"level{level.Number}.json");
+        string path = Path.Combine(levelsDirectory, $"level{level.Number}." + serializer.FileExtension);
         serializer.Save(path, level);
 
 #if UNITY_EDITOR

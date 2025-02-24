@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class SoundTriggerPair
+public struct SoundTriggerPair
 {
     public SoundTrigger SoundTrigger;
     public AudioClip AudioClip;

@@ -91,7 +91,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1207935943385976674}
-  - component: {fileID: 1911942721601179486}
+  - component: {fileID: 1543311272605949523}
+  - component: {fileID: 8316254173025140953}
   m_Layer: 0
   m_Name: TileItem
   m_TagString: Untagged
@@ -114,7 +115,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1911942721601179486
+--- !u!114 &1543311272605949523
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,9 +124,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1883422596950134786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f78a85fb13781304cb4db1b6c6e3ba4d, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e41975b5cdf14e49b71d684a6bafa5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 5212629942204392212}
-  animationDuration: 0.35
+  tileAnimation: {fileID: 8316254173025140953}
+--- !u!114 &8316254173025140953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883422596950134786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8240c0d6795fdf41b7330319714b24f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   animationType: 8

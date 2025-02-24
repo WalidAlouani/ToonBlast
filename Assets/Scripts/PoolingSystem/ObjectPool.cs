@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool<T> where T : Component, IPoolable
+public class ObjectPool<T> : IPoolingSystem<T> where T : Component, IPoolable
 {
     private readonly Queue<T> pool = new Queue<T>();
     private readonly T prefab;
@@ -29,7 +29,7 @@ public class ObjectPool<T> where T : Component, IPoolable
         return obj;
     }
 
-    public void ReturnToPool(T obj)
+    public void Return(T obj)
     {
         obj.OnRelease();
         obj.gameObject.SetActive(false);

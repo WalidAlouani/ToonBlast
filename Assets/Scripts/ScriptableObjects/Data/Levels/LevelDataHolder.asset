@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4112b697e5e71f949b766b314498736e, type: 3}
   m_Name: LevelDataHolder
   m_EditorClassIdentifier: 
-  CurrentLevel:
-    Number: 0
-    MaxMoves: 0
-    LevelGoals: []
+  LevelsNames: []
+  LevelsNumbers: 
+  LastUnlockedLevel: 1
+  SelectedLevel: 1

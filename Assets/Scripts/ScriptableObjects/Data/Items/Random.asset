@@ -14,5 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 0
   Name: Random
-  Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  Sprites:
+  - {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   Color: {r: 1, g: 1, b: 1, a: 1}
+  IsClickable: 1
+  IsDestroyable: 1
+  CanFall: 1
+  Health: 1
+  DamageType: 1
+  MatchingRule: {fileID: 11400000, guid: b15bf8314c1b545429d36c42316ec356, type: 2}

@@ -1,53 +1,121 @@
 using System;
-using DG.Tweening;
 using UnityEngine;
 
-public class TileItem : MonoBehaviour, IPoolable
+public abstract class TileItem : MonoBehaviour, IBoardElement, IPoolable, IClickable, IDestroyable, IDamagable
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private float animationDuration = 0.35f;
-    [SerializeField] private Ease animationType = Ease.InCubic;
+    [SerializeField] private TileAnimation tileAnimation;
 
-    private ItemTypeSO data;
-    public ItemType ItemType => data.Type;
     public int X { get; private set; }
     public int Y { get; private set; }
+    public bool CanFall => data.CanFall;
+    public ItemType ItemType => data.Type;
+    public IMatchingRule MatchingRule => data.MatchingRule;
+    public TileDamageType DamageType => data.DamageType;
+    public Action<TileItem> OnClick { get; set; }
+    public Action<TileItem> OnDestroy { get; set; }
+    public Action<TileItem> OnDamageReceived { get; set; }
 
-    public Action<TileItem> OnDestroy;
+    protected ItemTypeSO data;
+    protected int health;
 
     public void Init(int x, int y, ItemTypeSO typeData)
     {
-        X = x;
-        Y = y;
-        transform.localPosition = new Vector2(x, y);
+        SetCoordinates(x, y);
+        SetPosition(x, y);
+        UpdateVisual(typeData.GetSprite());
         data = typeData;
-        spriteRenderer.sprite = data.Sprite;
+        health = data.Health;
         name = $"Tile[{x},{y}]";
     }
 
-    public void UpdateCoordinates(int x, int y, bool animate = true)
+    public void SetCoordinates(int x, int y)
     {
         X = x;
         Y = y;
+    }
 
-        if (animate)
-            transform.DOLocalMove(new Vector2(x, y), animationDuration).SetEase(animationType);
+    public void SetPosition(int x, int y, float animationDuration = 0)
+    {
+        if (animationDuration != 0)
+            tileAnimation.MoveToPosition(new Vector2(x, y), animationDuration);
         else
             transform.localPosition = new Vector2(x, y);
     }
 
-    public void Destroy()
+    public void UpdateVisual(Sprite sprite)
     {
+        spriteRenderer.sprite = sprite;
+    }
+
+    public virtual void Click()
+    {
+        if (!data.IsClickable)
+            return;
+
+        OnClick?.Invoke(this);
+    }
+
+    public virtual void Destroy()
+    {
+        if (!data.IsDestroyable)
+            return;
+
         OnDestroy?.Invoke(this);
     }
 
-    public void OnCreate()
+    public virtual bool Damage()
     {
+        health--;
+        var destoy = health <= 0;
+
+        if (!destoy)
+        {
+            var index = data.Health - health;
+            var sprite = data.GetSprite(index);
+            if (sprite != null)
+                UpdateVisual(sprite);
+        }
+        else
+        {
+            Destroy();
+        }
+
+        return destoy;
     }
+
+    public void OnCreate() { }
 
     public void OnRelease()
     {
         transform.localScale = Vector3.one;
-        transform.localPosition = -Vector3.one;
+        SetPosition(-1, -1);
     }
 }
+
+public interface IBehavior { }
+
+public interface IClickable : IBehavior
+{
+    Action<TileItem> OnClick { get; set; }
+    void Click();
+}
+
+public interface IDestroyable : IBehavior
+{
+    Action<TileItem> OnDestroy { get; set; }
+    void Destroy();
+}
+
+public interface IDamagable : IBehavior
+{
+    Action<TileItem> OnDamageReceived { get; set; }
+    bool Damage();
+}
+
+public interface IExplodable : IBehavior
+{
+    Action<TileItem> OnExplode { get; set; }
+    bool Explode();
+}
+

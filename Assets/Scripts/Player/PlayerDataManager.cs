@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-public class PlayerDataManager
+public class PlayerDataManager : IPlayerDataManager
 {
     public int GetLastUnlockedLevel()
     {

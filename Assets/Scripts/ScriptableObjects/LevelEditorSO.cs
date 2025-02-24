@@ -1,10 +1,11 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LevelEditorConfig", menuName = "ScriptableObjects/LevelEditorConfig", order = 1)]
 public class LevelEditorSO : ScriptableObject
 {
+    [Header("Storage Section")]
     public string SaveDirectory;
+    public LevelSerializerType SerializerType;
 
     [Header("Grid Section")]
     public int MinGridWidth;
@@ -13,7 +14,9 @@ public class LevelEditorSO : ScriptableObject
     public int MaxGridHeight;
 
     [Header("Items Section")]
-    public ItemTypeSO RandomItem;
     public ItemInventorySO ItemInventory;
     public int MinTypeCountPerLevel;
+
+    [Header("Goals Section")]
+    public int MinGoalCount;
 }

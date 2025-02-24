@@ -3,26 +3,28 @@ using UnityEngine;
 
 public class SoundController : MonoBehaviour
 {
-    [SerializeField] private GameStateManager gameStateManager;
-    [SerializeField] private GoalManager goalManager;
-    [SerializeField] private BoardManager boardManager;
     [SerializeField] private AudioManager audioManager;
+    [SerializeField] private GoalManager goalManager;
 
-    private void Awake()
+    private void OnEnable()
     {
-        gameStateManager.OnStateChanged += OnGameStateChanged;
-        boardManager.OnTilesDestroyed += OnTilesDestroyed;
+        var eventManager = ServiceLocator.Get<EventManager>();
+        eventManager.OnTilesDestroyed.Subscribe(OnTilesDestroyed);
+        eventManager.OnGameStateChanged.Subscribe(OnGameStateChanged);
         goalManager.OnGoalCompleted += OnGoalCompleted;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        gameStateManager.OnStateChanged -= OnGameStateChanged;
-        boardManager.OnTilesDestroyed -= OnTilesDestroyed;
+        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
+        {
+            eventManager.OnTilesDestroyed.Unsubscribe(OnTilesDestroyed);
+            eventManager.OnGameStateChanged.Unsubscribe(OnGameStateChanged);
+        }
         goalManager.OnGoalCompleted -= OnGoalCompleted;
     }
 
-    private void OnTilesDestroyed(Vector2Int @int, List<TileItem> list)
+    private void OnTilesDestroyed(List<TileItem> list)
     {
         if (list.Count > 5)
             audioManager.PlaySound(SoundTrigger.TileBreak5);

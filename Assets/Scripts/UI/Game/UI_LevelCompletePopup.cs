@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,20 +5,22 @@ public class UI_LevelCompletePopup : MonoBehaviour
 {
     [SerializeField] private LevelDataManager levelDataManager;
     [SerializeField] private Button closeButton;
+    [SerializeField] private SoundTrigger closeButtonSound;
     [SerializeField] private Button nextLevelButton;
+    [SerializeField] private SoundTrigger nextLevelButtonSound;
 
     private void Start()
     {
         closeButton.onClick.AddListener(() =>
         {
+            AudioManager.Instance.PlaySound(closeButtonSound);
             SceneLoader.Instance.LoadMenuScene();
-            AudioManager.Instance.PlaySound(SoundTrigger.CloseButton);
         });
 
         nextLevelButton.onClick.AddListener(() =>
         {
             levelDataManager.SelectNextLevel();
-            AudioManager.Instance.PlaySound(SoundTrigger.ClickButton);
+            AudioManager.Instance.PlaySound(nextLevelButtonSound);
             SceneLoader.Instance.LoadGameScene();
         });
     }

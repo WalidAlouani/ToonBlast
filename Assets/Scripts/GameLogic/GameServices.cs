@@ -6,8 +6,10 @@ public class GameServices : MonoBehaviour
 
     private void Awake()
     {
-        ServiceLocator.Register(new LevelFileHandler(new LevelSerializer(), levelsConfig.SaveDirectory));
-        ServiceLocator.Register(new PlayerDataManager());
+        var levelSerializer = LevelSerializerUtils.GetLevelDataSerializer(levelsConfig.SerializerType);
+        ServiceLocator.Register(new LevelFileHandler(levelSerializer, levelsConfig.SaveDirectory));
+        ServiceLocator.Register<IPlayerDataManager>(new PlayerDataManager());
+        ServiceLocator.Register(new EventManager());
     }
 
     private void OnApplicationQuit()

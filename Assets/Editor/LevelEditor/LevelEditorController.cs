@@ -12,7 +12,8 @@ namespace Tools.LevelEditor
 
         public LevelEditorController(LevelEditorSO config)
         {
-            fileHandler = new LevelFileHandler(new LevelSerializer(), config.SaveDirectory);
+            var levelSerializer = LevelSerializerUtils.GetLevelDataSerializer(config.SerializerType);
+            fileHandler = new LevelFileHandler(levelSerializer, config.SaveDirectory);
             Config = config;
             RefreshLevelList();
         }

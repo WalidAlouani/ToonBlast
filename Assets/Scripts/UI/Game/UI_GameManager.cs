@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,19 +9,22 @@ public class UI_GameManager : MonoBehaviour
     [SerializeField] private UI_QuitPopup quitPopup;
     [SerializeField] private Button backButton;
 
-    void Start()
+    void OnEnable()
     {
         backButton.onClick.AddListener(() =>
         {
             if (gameStateManager.CurrentState == GameState.Playing)
                 gameStateManager.ChangeState(GameState.Paused);
         });
-        gameStateManager.OnStateChanged += OnGameStateChanged;
+
+        ServiceLocator.Get<EventManager>().OnGameStateChanged.Subscribe(OnGameStateChanged, this);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        gameStateManager.OnStateChanged -= OnGameStateChanged;
+        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
+            eventManager.OnGameStateChanged.Unsubscribe(OnGameStateChanged);
+
         backButton.onClick.RemoveAllListeners();
     }
 

@@ -5,5 +5,6 @@ public enum ItemType
     Green,
     Blue,
     Red,
+    Box,
 }
 

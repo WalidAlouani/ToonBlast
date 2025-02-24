@@ -7,9 +7,8 @@ public class UI_MainMenuManager : MonoBehaviour
     private void Start()
     {
         var levelsManager = ServiceLocator.Get<LevelFileHandler>();
-        var playerData = ServiceLocator.Get<PlayerDataManager>();
+        var playerData = ServiceLocator.Get<IPlayerDataManager>();
 
-        levelDataHolder.LevelsNames = levelsManager.GetLevelsNames();
         levelDataHolder.LevelsNumbers = levelsManager.GetLevelsNumbers();
         levelDataHolder.LastUnlockedLevel = playerData.GetLastUnlockedLevel();
     }

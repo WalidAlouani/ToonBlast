@@ -33,12 +33,7 @@ public class SoundBankSO : ScriptableObject
 
         foreach (var sound in Sounds)
         {
-            if (sound == null)
-            {
-                Debug.LogWarning("Null SoundPairTrigger found in SoundBank list.");
-                continue;
-            }
-            else if (SoundsByTypes.ContainsKey(sound.SoundTrigger))
+            if (SoundsByTypes.ContainsKey(sound.SoundTrigger))
             {
                 Debug.LogWarning($"Duplicate key {sound.SoundTrigger} found in SoundBank list. Ignoring.");
                 continue;

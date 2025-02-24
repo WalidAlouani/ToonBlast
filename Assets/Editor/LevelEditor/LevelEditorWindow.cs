@@ -25,11 +25,11 @@ namespace Tools.LevelEditor
             controller = new LevelEditorController(config);
 
             viewMapping = new Dictionary<LevelEditorScreen, ILevelEditorView>()
-        {
-            { LevelEditorScreen.LevelList, new LevelListView(controller, ChangeView) },
-            { LevelEditorScreen.LevelEditor, new LevelEditorView(controller, ChangeView) },
-            { LevelEditorScreen.CreateLevel, new CreateLevelView(controller, ChangeView) },
-        };
+            {
+                { LevelEditorScreen.LevelList, new LevelListView(controller, ChangeView) },
+                { LevelEditorScreen.LevelEditor, new LevelEditorView(controller, ChangeView) },
+                { LevelEditorScreen.CreateLevel, new CreateLevelView(controller, ChangeView) },
+            };
         }
 
         private void OnGUI()

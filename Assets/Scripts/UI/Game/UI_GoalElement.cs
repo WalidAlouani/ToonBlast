@@ -10,7 +10,7 @@ public class UI_GoalElement : MonoBehaviour
 
     public void Init(ItemTypeSO itemData, int count)
     {
-        icon.sprite = itemData.Sprite;
+        icon.sprite = itemData.GetSprite();
         UpdateValue(count);
     }
 

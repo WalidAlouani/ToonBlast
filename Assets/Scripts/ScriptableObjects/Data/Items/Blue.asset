@@ -14,5 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Type: 3
   Name: Blue
-  Sprite: {fileID: 21300000, guid: 139af91d2eb19554f941dd8f9fa911e7, type: 3}
+  Sprites:
+  - {fileID: 21300000, guid: 139af91d2eb19554f941dd8f9fa911e7, type: 3}
   Color: {r: 0, g: 0, b: 1, a: 1}
+  IsClickable: 1
+  IsDestroyable: 1
+  CanFall: 1
+  Health: 1
+  DamageType: 1
+  MatchingRule: {fileID: 11400000, guid: b15bf8314c1b545429d36c42316ec356, type: 2}

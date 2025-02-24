@@ -4,11 +4,11 @@ public class AudioManager : Singleton<AudioManager>
 {
     [SerializeField] private SoundBankSO soundBank;
     [SerializeField] private AudioSource audioSource;
-    private PlayerDataManager playerData;
+    private IPlayerDataManager playerData;
 
     private void Start()
     {
-        playerData = ServiceLocator.Get<PlayerDataManager>();
+        playerData = ServiceLocator.Get<IPlayerDataManager>();
         var isSoundMuted = playerData.LoadIsSoundMuted();
         audioSource.mute = isSoundMuted;
     }

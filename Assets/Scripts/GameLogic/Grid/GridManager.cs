@@ -3,21 +3,19 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     [SerializeField] private Transform gridContainer;
-    [SerializeField] private GridElement gridElement;
+    [SerializeField] private GridElement gridElementPrefab;
 
-    private GridElement[,] gridElements;
+    private GridBoard gridBoard;
 
     public void Init(int width, int height)
     {
-        gridElements = new GridElement[height, width];
+        gridBoard = new GridBoard(width, height);
 
-        for (int y = 0; y < height; y++)
+        gridBoard.ForEach((x, y) =>
         {
-            for (int x = 0; x < width; x++)
-            {
-                gridElements[x, y] = Instantiate(gridElement, gridContainer);
-                gridElements[x, y].Init(x, y);
-            }
-        }
+            var gridElement = Instantiate(gridElementPrefab, gridContainer);
+            gridBoard.SetElement(gridElement);
+            gridElement.Init(x, y);
+        });
     }
 }

@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MovesManager movesManager;
     [SerializeField] private GoalManager goalManager;
     [SerializeField] private GridManager gridManager;
+    [SerializeField] private TileFactory tileFactory;
     [SerializeField] private BoardManager boardManager;
-    [SerializeField] private MatchingManager matchingManager;
 
     private void Awake()
     {
@@ -49,8 +49,8 @@ public class GameManager : MonoBehaviour
         movesManager.Init(data.MaxMoves);
         goalManager.Init(data.LevelGoals);
         gridManager.Init(data.Width, data.Height);
-        boardManager.Init(data.Width, data.Height, data.Tiles, data.ActiveTypes);
-        matchingManager.Init(data.Width, data.Height);
+        tileFactory.Init(data.ActiveTypes);
+        boardManager.Init(data.Width, data.Height, data.Tiles);
     }
 
     private void OnGoalsCompleted()
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
 
     private void OnOutOfMoves()
     {
-        if (goalManager.GoalCompleted)
+        if (gameStateManager.CurrentState == GameState.LevelCompleted)
             return;
 
         gameStateManager.ChangeState(GameState.GameOver);

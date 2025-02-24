@@ -7,19 +7,21 @@ public class UI_QuitPopup : MonoBehaviour
 {
     [SerializeField] private GameStateManager gameStateManager;
     [SerializeField] private Button closeButton;
+    [SerializeField] private SoundTrigger closeButtonSound;
     [SerializeField] private Button quitButton;
+    [SerializeField] private SoundTrigger quitButtonSound;
 
     private void Start()
     {
         closeButton.onClick.AddListener(() =>
         {
-            AudioManager.Instance.PlaySound(SoundTrigger.CloseButton);
+            AudioManager.Instance.PlaySound(closeButtonSound);
             gameStateManager.ChangeState(GameState.Playing);
         });
 
         quitButton.onClick.AddListener(() =>
         {
-            AudioManager.Instance.PlaySound(SoundTrigger.ClickButton);
+            AudioManager.Instance.PlaySound(quitButtonSound);
             SceneLoader.Instance.LoadMenuScene();
         });
     }

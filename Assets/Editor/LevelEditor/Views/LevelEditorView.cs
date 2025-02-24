@@ -23,7 +23,7 @@ namespace Tools.LevelEditor
             this.changeView = changeView;
             config = controller.Config;
             availableItems = config.ItemInventory.ItemsByTypes;
-            availableItems[ItemType.None] = config.RandomItem;
+            availableItems[ItemType.None] = config.ItemInventory.Random;
 
             // Cache enum values (excluding None)
             allItemTypes = EnumUtils.GetValues<ItemType>().Skip(1).ToArray();
@@ -95,10 +95,13 @@ namespace Tools.LevelEditor
                 currentLevel.LevelGoals[i].Count = EditorGUILayout.IntField("Count", currentLevel.LevelGoals[i].Count);
 
                 // Remove button
-                if (GUILayout.Button("X", GUILayout.Width(25)))
+                if (currentLevel.LevelGoals.Count > config.MinGoalCount)
                 {
-                    currentLevel.LevelGoals.RemoveAt(i);
-                    break;
+                    if (GUILayout.Button("X", GUILayout.Width(25)))
+                    {
+                        currentLevel.LevelGoals.RemoveAt(i);
+                        break;
+                    }
                 }
                 GUILayout.EndHorizontal();
             }
@@ -113,7 +116,7 @@ namespace Tools.LevelEditor
         private void RenderActiveItemTypes()
         {
             GUILayout.Space(10);
-            GUILayout.Label("Active Item Types", EditorStyles.boldLabel);
+            GUILayout.Label("Spawnable Items", EditorStyles.boldLabel);
 
             for (int i = 0; i < currentLevel.ActiveTypes.Count; i++)
             {
@@ -154,7 +157,7 @@ namespace Tools.LevelEditor
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
-            if (!currentLevel.ActiveTypes.Contains(selectedItemType))
+            if (!currentLevel.ActiveTypes.Contains(selectedItemType) && selectedItemType != ItemType.None)
                 selectedItemType = currentLevel.ActiveTypes[0];
 
             foreach (var item in availableItems)
@@ -163,7 +166,7 @@ namespace Tools.LevelEditor
                     continue;
 
                 var size = selectedItemType == item.Key ? 75 : 60;
-                if (GUILayout.Button(item.Value.Sprite.texture, GUILayout.Width(size), GUILayout.Height(size)))
+                if (GUILayout.Button(item.Value.GetTexture(), GUILayout.Width(size), GUILayout.Height(size)))
                 {
                     selectedItemType = item.Key;
                 }
@@ -188,7 +191,7 @@ namespace Tools.LevelEditor
                     if (!currentLevel.ActiveTypes.Contains(currentLevel.Tiles[x][y]))
                         currentLevel.Tiles[x][y] = ItemType.None;
 
-                    var texture = availableItems[currentLevel.Tiles[x][y]].Sprite.texture;
+                    var texture = availableItems[currentLevel.Tiles[x][y]].GetTexture();
                     if (GUILayout.Button(texture, GUILayout.Width(50), GUILayout.Height(50)))
                     {
                         currentLevel.Tiles[x][y] = selectedItemType;
