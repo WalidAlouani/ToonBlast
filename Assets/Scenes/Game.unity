@@ -327,6 +327,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 133684883}
+  - component: {fileID: 133684884}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -348,6 +349,20 @@ Transform:
   m_Father: {fileID: 385974244}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &133684884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133684882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dad4fca7b823a1a4f845439f4d0dbe4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridContainer: {fileID: 133684883}
+  gridElementPrefab: {fileID: 4388147464495756689, guid: fc732ba9699ae8c40a6053506dedad33, type: 3}
 --- !u!114 &146989539 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8834462762553454296, guid: 4c31620012465d54cb6a9b8d91cb4d00, type: 3}
@@ -1632,8 +1647,8 @@ GameObject:
   - component: {fileID: 1070219579}
   - component: {fileID: 1070219582}
   - component: {fileID: 1070219580}
-  - component: {fileID: 1070219581}
   - component: {fileID: 1070219584}
+  - component: {fileID: 1070219577}
   - component: {fileID: 1070219586}
   - component: {fileID: 1070219587}
   m_Layer: 0
@@ -1643,6 +1658,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1070219577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070219576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7001a22c12fedde4a895c99bfe97119f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallDuration: 0.3
+  rearrangeDuration: 0.3
 --- !u!4 &1070219578
 Transform:
   m_ObjectHideFlags: 0
@@ -1684,20 +1713,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dc80433e14d54549a08e14057a51cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1070219581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070219576}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dad4fca7b823a1a4f845439f4d0dbe4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridContainer: {fileID: 133684883}
-  gridElementPrefab: {fileID: 4388147464495756689, guid: fc732ba9699ae8c40a6053506dedad33, type: 3}
 --- !u!114 &1070219582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1727,7 +1742,7 @@ MonoBehaviour:
   gameScreenFitter: {fileID: 385974245}
   movesManager: {fileID: 1070219580}
   goalManager: {fileID: 1070219582}
-  gridManager: {fileID: 1070219581}
+  gridManager: {fileID: 133684884}
   tileFactory: {fileID: 1566213223}
   boardManager: {fileID: 1070219584}
 --- !u!114 &1070219584
@@ -1744,9 +1759,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileFactory: {fileID: 1566213223}
   inputHandler: {fileID: 146989539}
+  animationController: {fileID: 1070219577}
   fallOffset: 10
-  fallDuration: 0.3
-  rearrangeDuration: 0.3
 --- !u!114 &1070219585
 MonoBehaviour:
   m_ObjectHideFlags: 0

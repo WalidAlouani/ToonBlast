@@ -3,6 +3,7 @@ using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
+// Change to scriptable object
 public class TileDestructionEffect : MonoBehaviour
 {
     [SerializeField] private TileFactory tileFactory;

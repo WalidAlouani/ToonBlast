@@ -46,14 +46,6 @@ public class SoundController : MonoBehaviour
             case GameState.WaitScreen:
                 audioManager.PlaySound(SoundTrigger.StartGame);
                 break;
-            case GameState.Playing:
-                break;
-            case GameState.Paused:
-                break;
-            case GameState.LevelCompleted:
-                break;
-            case GameState.GameOver:
-                break;
             case GameState.NextLevelPopup:
                 audioManager.PlaySound(SoundTrigger.LevelCompleted);
                 break;

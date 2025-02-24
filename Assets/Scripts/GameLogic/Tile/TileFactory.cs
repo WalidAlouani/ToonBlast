@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TileFactory : MonoBehaviour
+public class TileFactory : MonoBehaviour, ITileFactory
 {
     [SerializeField] private ItemInventorySO itemsInventory;
     [SerializeField] private Transform container;

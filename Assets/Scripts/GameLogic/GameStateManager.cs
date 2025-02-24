@@ -42,7 +42,7 @@ public class GameStateManager : MonoBehaviour
 
         ServiceLocator.Get<EventManager>().OnGameStateChanged.Publish(newState);
 
-        Debug.Log($"GameState: {CurrentState}");
+        //Debug.Log($"GameState: {CurrentState}");
     }
 
     public void EnqueueStateChange(GameState newState, float duration)

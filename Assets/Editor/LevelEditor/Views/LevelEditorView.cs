@@ -74,7 +74,8 @@ namespace Tools.LevelEditor
             GUILayout.Label("Level Goals", EditorStyles.boldLabel);
 
             // Convert active types to an array for use in the popup
-            var activeTypes = currentLevel.ActiveTypes.ToArray();
+            var activeTypes = currentLevel.ActiveTypes.ToList();
+            activeTypes.Insert(0, ItemType.None);
             string[] options = activeTypes.Select(t => t.ToString()).ToArray();
 
             for (int i = 0; i < currentLevel.LevelGoals.Count; i++)
@@ -82,7 +83,7 @@ namespace Tools.LevelEditor
                 GUILayout.BeginHorizontal();
 
                 // Find the index of the current level goal's type within the active types
-                int currentIndex = Array.IndexOf(activeTypes, currentLevel.LevelGoals[i].ItemType);
+                int currentIndex = Array.IndexOf(activeTypes.ToArray(), currentLevel.LevelGoals[i].ItemType);
 
                 // If the current type isn't available (case of removed type), default to the first active type
                 if (currentIndex < 0)
