@@ -1,23 +1,17 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class MovesManager : MonoBehaviour
+public class MovesManager: IDisposable
 {
     private int moves = 0;
 
     public Action<int> OnMovesChanged;
     public Action OnOutOfMoves;
 
-    private void OnEnable()
+    public MovesManager()
     {
-        ServiceLocator.Get<EventManager>().OnTilesDestroyed.Subscribe(DecreaseMoves, this);
-    }
-
-    private void OnDisable()
-    {
-        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
-            eventManager.OnTilesDestroyed.Unsubscribe(DecreaseMoves);
+        ServiceLocator.Register(this);
+        ServiceLocator.Get<EventManager>().OnTilesDestroyed.Subscribe(DecreaseMoves);
     }
 
     public void Init(int maxMoves)
@@ -35,5 +29,12 @@ public class MovesManager : MonoBehaviour
         OnMovesChanged?.Invoke(moves);
         if (moves == 0)
             OnOutOfMoves?.Invoke();
+    }
+
+    public void Dispose()
+    {
+        ServiceLocator.Deregister(this);
+        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
+            eventManager.OnTilesDestroyed.Unsubscribe(DecreaseMoves);
     }
 }

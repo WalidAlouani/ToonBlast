@@ -61,11 +61,11 @@ public class BoardManager : MonoBehaviour
         return tileItem;
     }
 
-    private void OnGridClicked(Vector2Int position)
+    private void OnGridClicked(Vector2 position)
     {
         if (blockInputs) return;
 
-        var clickedTile = board.GetElement(position.x, position.y);
+        var clickedTile = board.GetElementFromWorldPosition(position);
 
         clickedTile?.Click();
     }

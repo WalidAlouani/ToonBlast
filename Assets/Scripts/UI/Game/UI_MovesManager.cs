@@ -3,15 +3,17 @@ using UnityEngine;
 
 public class UI_MovesManager : MonoBehaviour
 {
-    [SerializeField] private MovesManager movesManager;
     [SerializeField] private TMP_Text moves;
 
-    void Awake()
+    private MovesManager movesManager;
+    
+    void OnEnable()
     {
+        movesManager = ServiceLocator.Get<MovesManager>();
         movesManager.OnMovesChanged += OnMovesChanged;
     }
 
-    void OnDestroy()
+    void OnDisable()
     {
         movesManager.OnMovesChanged -= OnMovesChanged;
     }

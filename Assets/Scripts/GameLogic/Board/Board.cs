@@ -17,11 +17,17 @@ public abstract class Board<T> where T : class, IBoardElement
     public virtual T GetElement(int x, int y)
     {
         if (!IsWithinBounds(x, y))
-        {
-            Debug.LogError($"GetElement out of bounds: ({x}, {y})");
             return null;
-        }
+
         return this[x, y];
+    }
+
+    public virtual T GetElementFromWorldPosition(Vector2 position)
+    {
+        var x = (int)(position.x + 0.5f);
+        var y = (int)(position.y + 0.5f);
+        Debug.Log("GetElemenet : " + x + " " + y);
+        return GetElement(x, y);
     }
 
     public virtual void SetElement(T element)

@@ -27,6 +27,17 @@ public static class ServiceLocator
         services.Remove(typeof(T));
     }
 
+    public static void Deregister<T>(T service)
+    {
+        if (!services.ContainsKey(typeof(T)))
+        {
+            Debug.LogWarning($"Service of type {typeof(T)} not found.");
+            return;
+        }
+
+        services.Remove(typeof(T));
+    }
+
     // Retrieve a service, throws exception if not found
     public static T Get<T>()
     {

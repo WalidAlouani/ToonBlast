@@ -5,14 +5,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameStateManager gameStateManager;
     [SerializeField] private LevelDataManager levelDataManager;
     [SerializeField] private GameScreenFitter gameScreenFitter;
-    [SerializeField] private MovesManager movesManager;
-    [SerializeField] private GoalManager goalManager;
-    [SerializeField] private GridManager gridManager;
     [SerializeField] private TileFactory tileFactory;
     [SerializeField] private BoardManager boardManager;
 
+    private MovesManager movesManager;
+    private GoalManager goalManager;
+
     private void Awake()
     {
+        movesManager = new MovesManager();
+        goalManager = new GoalManager();
         gameStateManager.ChangeState(GameState.Loading);
         SubscribeEvents();
     }
@@ -20,6 +22,8 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeEvents();
+        movesManager?.Dispose();
+        goalManager?.Dispose();
     }
 
     private void SubscribeEvents()
@@ -48,7 +52,6 @@ public class GameManager : MonoBehaviour
         gameScreenFitter.Init(data.Width, data.Height);
         movesManager.Init(data.MaxMoves);
         goalManager.Init(data.LevelGoals);
-        gridManager.Init(data.Width, data.Height);
         tileFactory.Init(data.ActiveTypes);
         boardManager.Init(data.Width, data.Height, data.Tiles);
     }

@@ -1,0 +1,1 @@
+D:\Unity Projects\MAG-ToonBlast\Library\Bee\Android\Prj\Mono2x\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\662t2s5p\obj\armeabi-v7a

@@ -4,23 +4,24 @@ using UnityEngine;
 public class SoundController : MonoBehaviour
 {
     [SerializeField] private AudioManager audioManager;
-    [SerializeField] private GoalManager goalManager;
+
+    private GoalManager goalManager;
+    private EventManager eventManager;
 
     private void OnEnable()
     {
-        var eventManager = ServiceLocator.Get<EventManager>();
+        eventManager = ServiceLocator.Get<EventManager>();
         eventManager.OnTilesDestroyed.Subscribe(OnTilesDestroyed);
         eventManager.OnGameStateChanged.Subscribe(OnGameStateChanged);
+
+        goalManager = ServiceLocator.Get<GoalManager>();
         goalManager.OnGoalCompleted += OnGoalCompleted;
     }
 
     private void OnDisable()
     {
-        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
-        {
-            eventManager.OnTilesDestroyed.Unsubscribe(OnTilesDestroyed);
-            eventManager.OnGameStateChanged.Unsubscribe(OnGameStateChanged);
-        }
+        eventManager.OnTilesDestroyed.Unsubscribe(OnTilesDestroyed);
+        eventManager.OnGameStateChanged.Unsubscribe(OnGameStateChanged);
         goalManager.OnGoalCompleted -= OnGoalCompleted;
     }
 

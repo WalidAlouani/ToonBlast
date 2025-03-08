@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
-public class GoalManager : MonoBehaviour
+public class GoalManager: IDisposable
 {
     public Action<List<LevelGoal>> OnGoalDefined;
     public Action<LevelGoal> OnGoalUpdated;
@@ -12,16 +11,12 @@ public class GoalManager : MonoBehaviour
 
     private List<LevelGoal> levelGoals;
 
-    private void OnEnable()
+    public GoalManager()
     {
-        ServiceLocator.Get<EventManager>().OnTilesDestroyed.Subscribe(UpdateGoal, this, 1);
+        ServiceLocator.Register(this);
+        ServiceLocator.Get<EventManager>().OnTilesDestroyed.Subscribe(UpdateGoal, null, 1);
     }
 
-    private void OnDisable()
-    {
-        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
-            eventManager.OnTilesDestroyed.Unsubscribe(UpdateGoal);
-    }
 
     public void Init(List<LevelGoal> levelGoals)
     {
@@ -53,5 +48,13 @@ public class GoalManager : MonoBehaviour
         {
             OnAllGoalsCompleted?.Invoke();
         }
+    }
+
+    public void Dispose()
+    {
+        ServiceLocator.Deregister(this);
+
+        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
+            eventManager.OnTilesDestroyed.Unsubscribe(UpdateGoal);
     }
 }

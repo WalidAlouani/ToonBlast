@@ -4,7 +4,7 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour
 {
     [SerializeField] private Camera _camera;
-    public Action<Vector2Int> OnGridClicked;
+    public Action<Vector2> OnGridClicked;
     private InputSource inputSource;
 
     private void Start()
@@ -47,15 +47,8 @@ public class InputHandler : MonoBehaviour
             return;
 
         var worldPoint = _camera.ScreenToWorldPoint(position);
-        var hit = Physics2D.Raycast(worldPoint, Vector2.zero);
-        if (hit.collider == null)
-            return;
 
-        var gridElement = hit.collider.GetComponent<GridElement>();
-        if (gridElement == null)
-            return;
-
-        OnGridClicked?.Invoke(new Vector2Int(gridElement.X, gridElement.Y));
-        //Debug.Log("Tile clicked: " + gridElement.X + " " + gridElement.Y);
+        OnGridClicked?.Invoke(worldPoint);
+        Debug.Log(worldPoint);
     }
 }

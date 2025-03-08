@@ -1,21 +1,31 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_GoalManager : MonoBehaviour
 {
-    [SerializeField] private GoalManager goalManager;
     [SerializeField] private ItemInventorySO itemsInventory;
     [SerializeField] private RectTransform goalContainer;
     [SerializeField] private UI_GoalElement goalElement;
 
+    private GoalManager goalManager;
     private Dictionary<ItemType, UI_GoalElement> goalElements;
 
     void Awake()
     {
+        goalElements = new Dictionary<ItemType, UI_GoalElement>();
+    }
+
+    private void OnEnable()
+    {
+        goalManager = ServiceLocator.Get<GoalManager>();
         goalManager.OnGoalDefined += InitializeGoal;
         goalManager.OnGoalUpdated += UpdateGoal;
-        goalElements = new Dictionary<ItemType, UI_GoalElement>();
+    }
+
+    void OnDisable()
+    {
+        goalManager.OnGoalDefined -= InitializeGoal;
+        goalManager.OnGoalUpdated -= UpdateGoal;
     }
 
     private void UpdateGoal(LevelGoal goal)
@@ -23,11 +33,7 @@ public class UI_GoalManager : MonoBehaviour
         goalElements[goal.ItemType].UpdateValue(goal.Count);
     }
 
-    void OnDestroy()
-    {
-        goalManager.OnGoalDefined -= InitializeGoal;
-        goalManager.OnGoalUpdated -= UpdateGoal;
-    }
+
 
     private void InitializeGoal(List<LevelGoal> levelGoals)
     {
