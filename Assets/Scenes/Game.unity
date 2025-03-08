@@ -931,7 +931,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 980, y: 2180}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &737211831
 MonoBehaviour:
@@ -2383,7 +2383,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 980, y: 1918}
+  m_SizeDelta: {x: 0, y: 1918}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1529305838
 MonoBehaviour:
@@ -2508,7 +2508,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -980, y: -2180}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1538511012
 MonoBehaviour:
@@ -3652,8 +3652,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 941.5}
-  m_SizeDelta: {x: 980, y: 297}
+  m_AnchoredPosition: {x: 0, y: -148.50012}
+  m_SizeDelta: {x: 0, y: 297}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2005547335
 CanvasRenderer:
@@ -3840,7 +3840,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 980, y: 1918}
+  m_SizeDelta: {x: 0, y: 1918}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2052923086
 MonoBehaviour:
@@ -4065,8 +4065,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: -991.3574}
-  m_SizeDelta: {x: 980, y: 197.286}
+  m_AnchoredPosition: {x: 0, y: 98.64282}
+  m_SizeDelta: {x: 0, y: 197.286}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2116510096
 MonoBehaviour:
@@ -4199,7 +4199,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 980, y: 1918}
+  m_SizeDelta: {x: 0, y: 1918}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &536697320759655091
 CanvasRenderer:
