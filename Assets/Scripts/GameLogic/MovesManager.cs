@@ -1,17 +1,20 @@
 using System;
 using System.Collections.Generic;
 
-public class MovesManager: IDisposable
+public class MovesManager : IDisposable
 {
     private int moves = 0;
 
     public Action<int> OnMovesChanged;
     public Action OnOutOfMoves;
 
+    private EventManager eventManager;
+
     public MovesManager()
     {
         ServiceLocator.Register(this);
-        ServiceLocator.Get<EventManager>().OnTilesDestroyed.Subscribe(DecreaseMoves);
+        eventManager = ServiceLocator.Get<EventManager>();
+        eventManager.OnTilesDestroyed.Subscribe(DecreaseMoves);
     }
 
     public void Init(int maxMoves)
@@ -34,7 +37,6 @@ public class MovesManager: IDisposable
     public void Dispose()
     {
         ServiceLocator.Deregister(this);
-        if (ServiceLocator.TryGet<EventManager>(out var eventManager))
-            eventManager.OnTilesDestroyed.Unsubscribe(DecreaseMoves);
+        eventManager?.OnTilesDestroyed.Unsubscribe(DecreaseMoves);
     }
 }

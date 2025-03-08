@@ -24,8 +24,8 @@ public abstract class Board<T> where T : class, IBoardElement
 
     public virtual T GetElementFromWorldPosition(Vector2 position)
     {
-        var x = (int)(position.x + 0.5f);
-        var y = (int)(position.y + 0.5f);
+        var x = Mathf.FloorToInt(position.x + 0.5f);
+        var y = Mathf.FloorToInt(position.y + 0.5f);
         Debug.Log("GetElemenet : " + x + " " + y);
         return GetElement(x, y);
     }
